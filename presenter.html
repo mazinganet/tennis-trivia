@@ -68,21 +68,29 @@
             <div id="answers-container" class="answers-grid"></div>
         </div>
 
-        <!-- Progress Bar & Timer -->
-        <div class="progress-container">
-            <div id="timer-display" class="timer-display">15</div> <!-- New Timer -->
-            <div class="progress-text">Hanno risposto: <span id="answered-count">0</span> / <span
-                    id="total-teams">0</span></div>
-            <div class="progress-bar-bg">
-                <div id="progress-bar" class="progress-bar-fill"></div>
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <!-- Left: Progress -->
+            <div class="progress-section">
+                <div class="progress-text">Hanno risposto: <span id="answered-count">0</span> / <span
+                        id="total-teams">0</span></div>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar" class="progress-bar-fill"></div>
+                </div>
             </div>
-        </div>
 
-        <!-- Controls -->
-        <div class="controls" style="bottom: 40px;"> <!-- Lifted up slightly -->
-            <button id="next-btn" class="btn-primary">
-                <span>Mostra Risultati</span>
-            </button>
+            <!-- Right: Controls -->
+            <div class="controls-section">
+                <button id="next-btn" class="btn-primary">
+                    <span>Mostra Risultati</span>
+                </button>
+
+                <div id="timer-display" class="timer-display">15</div>
+
+                <button id="terminate-btn" class="btn-floating-danger">
+                    ❌ Termina
+                </button>
+            </div>
         </div>
     </div>
 
@@ -122,6 +130,7 @@
         const playersList = document.getElementById('players-list');
         const scoreboard = document.getElementById('scoreboard');
         const answersContainer = document.getElementById('answers-container');
+        const terminateBtn = document.getElementById('terminate-btn');
 
         // Listeners
         document.getElementById('start-game').addEventListener('click', () => {
@@ -129,17 +138,12 @@
             socket.emit('presenter:startGame', num);
         });
 
-        // Add Terminate Button dynamically (Fixed Position Bottom Right)
-        const terminateBtn = document.createElement('button');
-        terminateBtn.id = 'terminate-btn';
-        terminateBtn.className = 'btn-floating-danger';
-        terminateBtn.innerHTML = '❌ Termina';
+        // Terminate Button Logic
         terminateBtn.addEventListener('click', () => {
             if (confirm('Terminare la partita corrente? Tutti i progressi andranno persi.')) {
                 socket.emit('presenter:resetGame');
             }
         });
-        document.body.appendChild(terminateBtn);
 
         nextBtn.addEventListener('click', () => {
             socket.emit('presenter:next');

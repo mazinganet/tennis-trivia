@@ -650,3 +650,77 @@ body {
         transform: translate(1px, -2px) rotate(-1deg);
     }
 }
+/* ==================== Bottom Bar Layout ==================== */
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(15, 15, 35, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--glass-border);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.bottom-bar .progress-section {
+    flex: 0 0 300px;
+}
+
+.bottom-bar .controls-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* Adjust Timer inside Bar */
+.timer-display {
+    margin: 0;
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+/* Override btn-primary inside controls for better sizing if needed */
+.controls-section .btn-primary {
+    width: auto;
+    /* Let it shrink to content */
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+}
+
+/* Override btn-floating-danger to be inline */
+.btn-floating-danger {
+    position: static;
+    /* No longer fixed */
+    display: block;
+    /* Always visible in bar */
+    transform: none;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+/* Hide terminate by default only in setup if wanted, 
+   but logic shows/hides via style.display 'block'/'none' 
+   which overrides this class if set inline.
+   We can keep the class style generic. */
+
+/* Responsive: Stack on mobile */
+@media (max-width: 768px) {
+    .bottom-bar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .bottom-bar .progress-section {
+        width: 100%;
+        text-align: center;
+    }
+
+    .bottom-bar .controls-section {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
