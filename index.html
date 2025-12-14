@@ -1,145 +1,72 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tennis Trivia - Gioco a Squadre 🎾</title>
-    <meta name="description" content="Gioco trivia a squadre sul tennis con domande su giocatori e tecnica">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Tennis Trivia - Online</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-large {
+            display: block;
+            width: 300px;
+            padding: 1.5rem;
+            margin: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .btn-presenter {
+            background: #4e54c8;
+        }
+
+        .btn-player {
+            background: #00b894;
+        }
+
+        .btn-large:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
+
 <body>
-    <!-- Schermata Iniziale -->
-    <div id="setup-screen" class="screen active">
-        <div class="setup-container">
-            <div class="logo-container">
-                <div class="tennis-ball"></div>
-                <h1>Tennis Trivia</h1>
-                <p class="subtitle">Sfida le tue conoscenze sul tennis!</p>
-            </div>
-            
-            <div class="glass-card">
-                <h2>Configura le Squadre</h2>
-                
-                <div class="teams-config">
-                    <div class="team-input">
-                        <label for="team1">Squadra 1</label>
-                        <input type="text" id="team1" placeholder="Nome squadra..." maxlength="20">
-                        <div class="team-color" style="--team-color: #00d4aa"></div>
-                    </div>
-                    
-                    <div class="team-input">
-                        <label for="team2">Squadra 2</label>
-                        <input type="text" id="team2" placeholder="Nome squadra..." maxlength="20">
-                        <div class="team-color" style="--team-color: #ff6b6b"></div>
-                    </div>
-                    
-                    <div class="team-input optional" id="team3-container">
-                        <label for="team3">Squadra 3 (opzionale)</label>
-                        <input type="text" id="team3" placeholder="Nome squadra..." maxlength="20">
-                        <div class="team-color" style="--team-color: #4ecdc4"></div>
-                    </div>
-                    
-                    <div class="team-input optional" id="team4-container">
-                        <label for="team4">Squadra 4 (opzionale)</label>
-                        <input type="text" id="team4" placeholder="Nome squadra..." maxlength="20">
-                        <div class="team-color" style="--team-color: #ffe66d"></div>
-                    </div>
-                </div>
-                
-                <div class="questions-config">
-                    <label for="num-questions">Numero di domande:</label>
-                    <select id="num-questions">
-                        <option value="10">10 domande</option>
-                        <option value="15" selected>15 domande</option>
-                        <option value="20">20 domande</option>
-                        <option value="30">30 domande</option>
-                    </select>
-                </div>
-                
-                <button id="start-game" class="btn-primary">
-                    <span>Inizia il Gioco</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
+    <h1>Tennis Trivia</h1>
+    <p>Scegli la tua modalità:</p>
 
-    <!-- Schermata di Gioco -->
-    <div id="game-screen" class="screen">
-        <!-- Scoreboard -->
-        <div id="scoreboard" class="scoreboard">
-            <!-- I punteggi delle squadre verranno inseriti dinamicamente -->
-        </div>
+    <a href="presenter.html" class="btn-large btn-presenter">
+        📺 Sono il Presentatore
+        <div style="font-size: 0.8rem; font-weight: normal; margin-top: 5px;">(Usa questo su PC)</div>
+    </a>
 
-        <!-- Area Domanda -->
-        <div class="question-area">
-            <div class="question-header">
-                <span class="question-number">Domanda <span id="current-q">1</span> di <span id="total-q">15</span></span>
-                <span class="category-badge" id="category-badge">Giocatori</span>
-            </div>
-            
-            <div class="question-card glass-card">
-                <h2 id="question-text">La domanda apparirà qui...</h2>
-            </div>
-            
-            <div id="answers-container" class="answers-grid">
-                <!-- Le risposte verranno inserite dinamicamente -->
-            </div>
-        </div>
-
-        <!-- Team Selection Modal -->
-        <div id="team-select-modal" class="modal">
-            <div class="modal-content glass-card">
-                <h3>Chi ha risposto per primo?</h3>
-                <div id="team-buttons" class="team-buttons">
-                    <!-- I pulsanti delle squadre verranno inseriti dinamicamente -->
-                </div>
-                <button id="no-answer" class="btn-secondary">Nessuno ha risposto</button>
-            </div>
-        </div>
-
-        <!-- Result Overlay -->
-        <div id="result-overlay" class="result-overlay">
-            <div class="result-content">
-                <div id="result-icon" class="result-icon"></div>
-                <h2 id="result-text"></h2>
-                <p id="correct-answer-text"></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Schermata Finale -->
-    <div id="end-screen" class="screen">
-        <div class="end-container">
-            <div class="confetti-container" id="confetti"></div>
-            
-            <div class="trophy-container">
-                <div class="trophy">🏆</div>
-            </div>
-            
-            <h1>Partita Terminata!</h1>
-            
-            <div id="final-rankings" class="final-rankings glass-card">
-                <!-- La classifica finale verrà inserita dinamicamente -->
-            </div>
-            
-            <div class="end-buttons">
-                <button id="play-again" class="btn-primary">
-                    <span>Gioca Ancora</span>
-                </button>
-                <button id="new-teams" class="btn-secondary">
-                    <span>Nuove Squadre</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script src="questions.js"></script>
-    <script src="script.js"></script>
+    <a href="player.html" class="btn-large btn-player">
+        📱 Sono un Giocatore
+        <div style="font-size: 0.8rem; font-weight: normal; margin-top: 5px;">(Usa questo su Cellulare)</div>
+    </a>
 </body>
+
 </html>
