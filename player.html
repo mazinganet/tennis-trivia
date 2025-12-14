@@ -56,11 +56,17 @@
         <div class="buzzer-area">
             <p class="instruction" id="instruction">Scegli la risposta!</p>
 
+            <div id="question-display" class="question-display"></div>
+
             <div class="answer-buttons">
-                <button class="buzz-btn" data-answer="0">A</button>
-                <button class="buzz-btn" data-answer="1">B</button>
-                <button class="buzz-btn" data-answer="2">C</button>
-                <button class="buzz-btn" data-answer="3">D</button>
+                <button class="buzz-btn" data-answer="0"><span class="btn-letter">A</span><span
+                        class="btn-text"></span></button>
+                <button class="buzz-btn" data-answer="1"><span class="btn-letter">B</span><span
+                        class="btn-text"></span></button>
+                <button class="buzz-btn" data-answer="2"><span class="btn-letter">C</span><span
+                        class="btn-text"></span></button>
+                <button class="buzz-btn" data-answer="3"><span class="btn-letter">D</span><span
+                        class="btn-text"></span></button>
             </div>
         </div>
 
@@ -204,6 +210,18 @@
             } else {
                 header.classList.remove('special');
                 header.innerHTML = `<span class="question-counter">Domanda <span id="q-num">${q.index}</span>/<span id="q-total">${q.total}</span></span>`;
+            }
+
+            // Update Question Text
+            const questionDisplay = document.getElementById('question-display');
+            questionDisplay.textContent = q.question;
+
+            // Update Answer Buttons
+            const btnTexts = document.querySelectorAll('.btn-text');
+            if (q.answers && q.answers.length === 4) {
+                btnTexts.forEach((span, idx) => {
+                    span.textContent = q.answers[idx];
+                });
             }
 
             enableAnswering();
