@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Trivia - Presentatore 🎾</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="presenter.css">
+</head>
+
+<body>
+    <!-- Setup Screen -->
+    <div id="setup-screen" class="screen active">
+        <div class="setup-container">
+            <div class="logo-container">
+                <div class="tennis-ball"></div>
+                <h1>Tennis Trivia</h1>
+                <p class="subtitle">Modalità Presentatore</p>
+            </div>
+
+            <div class="glass-card">
+                <div class="players-waiting">
+                    <h3>Squadre Connesse: <span id="player-count">0</span></h3>
+                    <div id="players-list" class="players-list"></div>
+                    <p class="waiting-hint">In attesa che le squadre si colleghino...</p>
+                </div>
+
+                <div class="questions-config">
+                    <label for="num-questions">Numero domande:</label>
+                    <select id="num-questions">
+                        <option value="10">10</option>
+                        <option value="15" selected>15</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                </div>
+
+                <button id="start-game" class="btn-primary">
+                    <span>Inizia il Gioco</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- Scoreboard -->
+        <div id="scoreboard" class="scoreboard compact"></div>
+
+        <!-- Question Area -->
+        <div class="question-area">
+            <div class="question-header">
+                <span class="question-number">Domanda <span id="current-q">1</span> di <span
+                        id="total-q">15</span></span>
+                <span class="category-badge" id="category-badge">Categoria</span>
+            </div>
+
+            <div class="question-card glass-card">
+                <h2 id="question-text">Preparati...</h2>
+            </div>
+
+            <div id="answers-container" class="answers-grid"></div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-text">Hanno risposto: <span id="answered-count">0</span> / <span
+                    id="total-teams">0</span></div>
+            <div class="progress-bar-bg">
+                <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button id="next-btn" class="btn-primary">
+                <span>Mostra Risultati</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="end-screen" class="screen">
+        <div class="end-container">
+            <div class="confetti-container" id="confetti"></div>
+            <div class="trophy-container">
+                <div class="trophy">🏆</div>
+            </div>
+            <h1>Classifica Finale!</h1>
+            <div id="final-rankings" class="final-rankings glass-card"></div>
+            <div class="end-buttons">
+                <button id="new-game" class="btn-primary">Nuova Partita</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // State
+        let teams = [];
+        let currentQuestion = null;
+        let phase = 'setup';
+
+        // Elements
+        const screens = {
+            setup: document.getElementById('setup-screen'),
+            game: document.getElementById('game-screen'),
+            end: document.getElementById('end-screen')
+        };
+
+        const nextBtn = document.getElementById('next-btn');
+        const playerCount = document.getElementById('player-count');
+        const playersList = document.getElementById('players-list');
+        const scoreboard = document.getElementById('scoreboard');
+        const answersContainer = document.getElementById('answers-container');
+
+        // Listeners
+        // Listeners
+        document.getElementById('start-game').addEventListener('click', () => {
+            const num = parseInt(document.getElementById('num-questions').value);
+            socket.emit('presenter:startGame', num);
+        });
+
+        // Add Terminate Button dynamically
+        const controlsDiv = document.querySelector('.controls');
+        if (controlsDiv) {
+            const terminateBtn = document.createElement('button');
+            terminateBtn.id = 'terminate-btn';
+            terminateBtn.className = 'btn-secondary'; // Needs styling but default is ok-ish or inherit
+            terminateBtn.style.background = 'rgba(255,107,107,0.1)';
+            terminateBtn.style.color = '#ff6b6b';
+            terminateBtn.style.border = '1px solid #ff6b6b';
+            terminateBtn.style.borderRadius = '12px';
+            terminateBtn.style.padding = '0.8rem';
+            terminateBtn.style.marginTop = '1rem';
+            terminateBtn.style.width = '100%';
+            terminateBtn.style.cursor = 'pointer';
+            terminateBtn.innerHTML = '⚠️ Termina Partita';
+            terminateBtn.style.display = 'none'; // Hidden initially
+
+            terminateBtn.addEventListener('click', () => {
+                if (confirm('Terminare la partita corrente? Tutti i progressi andranno persi.')) {
+                    socket.emit('presenter:resetGame');
+                }
+            });
+            controlsDiv.appendChild(terminateBtn);
+        }
+
+        nextBtn.addEventListener('click', () => {
+            socket.emit('presenter:next');
+        });
+
+        document.getElementById('new-game').addEventListener('click', () => {
+            socket.emit('presenter:resetGame');
+        });
+
+        // Socket Events
+        socket.emit('presenter:join');
+
+        socket.on('game:reset', () => {
+            location.reload();
+        });
+
+        socket.on('presenter:updateTeams', (t) => {
+            teams = t;
+            updateTeamsList();
+            updateScoreboard();
+            document.getElementById('total-teams').textContent = teams.length;
+        });
+
+        socket.on('game:started', ({ totalQuestions }) => {
+            document.getElementById('total-q').textContent = totalQuestions;
+            switchScreen('game');
+            const termBtn = document.getElementById('terminate-btn');
+            if (termBtn) termBtn.style.display = 'block';
+        });
+
+        socket.on('game:question', (q) => {
+            currentQuestion = q;
+            phase = 'question';
+            showQuestion(q);
+
+            nextBtn.innerHTML = '<span>Mostra Risultati</span>';
+            resetProgress();
+        });
+
+        socket.on('presenter:answerUpdate', ({ answered, total }) => {
+            document.getElementById('answered-count').textContent = answered;
+            document.getElementById('total-teams').textContent = total;
+            const pct = (answered / total) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        });
+
+        socket.on('game:result', ({ correctAnswer, teams: t }) => {
+            teams = t;
+            phase = 'result';
+            updateScoreboard();
+            revealAnswer(correctAnswer);
+
+            nextBtn.innerHTML = '<span>Prossima Domanda</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+        });
+
+        socket.on('game:over', ({ teams: t }) => {
+            teams = t;
+            showEndScreen();
+        });
+
+        // Functions
+        function switchScreen(name) {
+            Object.values(screens).forEach(s => s.classList.remove('active'));
+            screens[name].classList.add('active');
+        }
+
+        function updateTeamsList() {
+            playerCount.textContent = teams.length;
+            playersList.innerHTML = teams.map(t =>
+                `<div class="player-item" style="border-color:${t.color}">${escapeHtml(t.name)}</div>`
+            ).join('');
+        }
+
+        function updateScoreboard() {
+            scoreboard.innerHTML = '';
+            teams.forEach(t => {
+                const div = document.createElement('div');
+                div.className = 'team-score';
+                div.style.setProperty('--team-color', t.color);
+                div.innerHTML = `
+                    <div class="team-indicator"></div>
+                    <span class="team-name">${escapeHtml(t.name)}</span>
+                    <span class="team-points">${t.score}</span>
+                `;
+                scoreboard.appendChild(div);
+            });
+        }
+
+        function showQuestion(q) {
+            document.getElementById('current-q').textContent = q.index;
+            document.getElementById('category-badge').textContent = q.category;
+
+            const qt = document.getElementById('question-text');
+            qt.style.animation = 'none';
+            qt.offsetHeight;
+            qt.style.animation = 'questionIn 0.5s ease-out';
+            qt.textContent = q.question;
+
+            answersContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            q.answers.forEach((ans, i) => {
+                const btn = document.createElement('div');
+                btn.className = 'answer-btn';
+                btn.innerHTML = `<span class="answer-letter">${letters[i]}</span>${escapeHtml(ans)}`;
+                answersContainer.appendChild(btn);
+            });
+        }
+
+        function revealAnswer(correctIndex) {
+            const buttons = answersContainer.querySelectorAll('.answer-btn');
+            buttons.forEach((btn, i) => {
+                if (i === correctIndex) {
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('disabled');
+                }
+            });
+        }
+
+        function resetProgress() {
+            document.getElementById('answered-count').textContent = '0';
+            document.getElementById('progress-bar').style.width = '0%';
+        }
+
+        function showEndScreen() {
+            switchScreen('end');
+            const rankings = document.getElementById('final-rankings');
+            rankings.innerHTML = '';
+            const positions = ['🥇', '🥈', '🥉'];
+
+            teams.forEach((t, i) => {
+                const div = document.createElement('div');
+                div.className = 'ranking-item';
+                div.innerHTML = `
+                    <span class="ranking-position">${positions[i] || (i + 1) + '°'}</span>
+                    <span class="ranking-team">${escapeHtml(t.name)}</span>
+                    <span class="ranking-score" style="color:${t.color}">${t.score}</span>
+                `;
+                rankings.appendChild(div);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+
+</html>

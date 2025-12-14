@@ -1,0 +1,23 @@
+{
+  "name": "tennis-trivia",
+  "version": "1.0.0",
+  "description": "Multiplayer Tennis Trivia Game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tennis",
+    "trivia",
+    "game",
+    "socket.io",
+    "multiplayer"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.1"
+  }
+}
