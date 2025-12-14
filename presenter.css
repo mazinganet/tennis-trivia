@@ -507,4 +507,67 @@ body {
     .logo-container h1 {
         font-size: 2.5rem;
     }
+}/* ==================== Floating Buttons ==================== */
+.btn-floating-danger {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    display: none;
+    /* Hidden by default */
+}
+
+.btn-floating-danger:hover {
+    background: rgba(255, 107, 107, 0.2);
+    transform: scale(1.05);
+}
+
+/* ==================== Result Feedback on Scoreboard ==================== */
+.team-score {
+    position: relative;
+    overflow: visible;
+}
+
+.team-score.correct {
+    background: rgba(0, 212, 170, 0.2);
+    border-color: var(--success);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+}
+
+.team-score.wrong {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: var(--danger);
+    opacity: 0.8;
+}
+
+.team-score.timeout {
+    opacity: 0.6;
+    border-color: #666;
+}
+
+.status-icon {
+    font-size: 1.5rem;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }

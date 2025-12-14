@@ -51,7 +51,9 @@ function getNextColor() {
 io.on('connection', (socket) => {
   console.log('Connection:', socket.id);
 
-  // PRESENTER
+  let gameTimer = null;
+  const TIME_LIMIT = 15;
+
   socket.on('presenter:join', () => {
     gameState.presenter = socket.id;
     socket.join('presenter');
@@ -93,7 +95,24 @@ io.on('connection', (socket) => {
     }
   });
 
+  function startTimer() {
+    if (gameTimer) clearInterval(gameTimer);
+    let timeLeft = TIME_LIMIT;
+
+    // Notify clients of timer start
+    io.emit('game:timer', { timeLeft });
+
+    gameTimer = setInterval(() => {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        clearInterval(gameTimer);
+        showResults();
+      }
+    }, 1000);
+  }
+
   function nextQuestion() {
+    if (gameTimer) clearInterval(gameTimer);
     gameState.currentQuestionIndex++;
 
     if (gameState.currentQuestionIndex >= gameState.questions.length) {
@@ -128,9 +147,14 @@ io.on('connection', (socket) => {
       question: gameState.currentQuestion.question,
       answers: gameState.currentQuestion.answers
     });
+
+    startTimer();
   }
 
   function showResults() {
+    if (gameTimer) clearInterval(gameTimer);
+    if (gameState.phase === 'result') return; // Already showing
+
     gameState.phase = 'result';
     const q = gameState.questions[gameState.currentQuestionIndex];
     const correctAnswer = q.correct;
@@ -138,11 +162,12 @@ io.on('connection', (socket) => {
     // Calculate scores
     let roundResults = []; // { teamName, correct, earned }
 
-    Object.keys(gameState.answers).forEach(socketId => {
-      const team = gameState.teams[socketId];
-      if (!team) return;
+    Object.keys(gameState.teams).forEach(teamId => { // Iterate ALL teams, even if they didn't answer
+      const team = gameState.teams[teamId];
+      if (!team.connected) return;
 
-      const answer = gameState.answers[socketId];
+      const answer = gameState.answers[teamId];
+      const answered = answer !== undefined;
       const isCorrect = answer === correctAnswer;
 
       if (isCorrect) {
@@ -150,15 +175,17 @@ io.on('connection', (socket) => {
       }
 
       roundResults.push({
-        teamId: socketId,
-        isCorrect: isCorrect
+        teamId: teamId,
+        isCorrect: isCorrect,
+        answered: answered
       });
     });
 
-    // Notify Presenter (updated scoreboard)
+    // Notify Presenter (updated scoreboard + round details)
     io.to('presenter').emit('game:result', {
       correctAnswer: correctAnswer,
-      teams: getTeamList()
+      teams: getTeamList(),
+      roundDetails: roundResults // Send who got it right/wrong
     });
 
     // Notify Players (individual feedback)
@@ -171,6 +198,7 @@ io.on('connection', (socket) => {
     roundResults.forEach(res => {
       io.to(res.teamId).emit('player:feedback', {
         correct: res.isCorrect,
+        answered: res.answered,
         score: gameState.teams[res.teamId].score
       });
     });
@@ -298,40 +326,57 @@ io.on('connection', (socket) => {
     // Notify player
     socket.emit('player:answerReceived');
 
-    // Notify presenter (update counts)
-    io.to('presenter').emit('presenter:answerUpdate', {
-      answered: Object.keys(gameState.answers).length,
-      total: Object.keys(gameState.teams).filter(id => gameState.teams[id].connected).length
+    socket.on('player:answer', (answerIndex) => {
+      if (gameState.phase !== 'question') return;
+      if (gameState.answers[socket.id] !== undefined) return; // Already answered
+
+      gameState.answers[socket.id] = answerIndex;
+
+      // Notify player
+      socket.emit('player:answerReceived');
+
+      // Notify presenter (update counts)
+      const connectedTeams = Object.keys(gameState.teams).filter(id => gameState.teams[id].connected).length;
+      const answeredCount = Object.keys(gameState.answers).length;
+
+      io.to('presenter').emit('presenter:answerUpdate', {
+        answered: answeredCount,
+        total: connectedTeams
+      });
+
+      // Check if ALL answered
+      if (answeredCount >= connectedTeams) {
+        showResults();
+      }
+    });
+
+    socket.on('disconnect', () => {
+      if (gameState.teams[socket.id]) {
+        gameState.teams[socket.id].connected = false;
+        // Notify presenter but don't delete immediately (wait for reconnect)
+        io.to('presenter').emit('presenter:updateTeams', getTeamList());
+        console.log(`Team ${gameState.teams[socket.id].name} disconnected (waiting for reconnect)`);
+      }
     });
   });
 
-  socket.on('disconnect', () => {
-    if (gameState.teams[socket.id]) {
-      gameState.teams[socket.id].connected = false;
-      // Notify presenter but don't delete immediately (wait for reconnect)
-      io.to('presenter').emit('presenter:updateTeams', getTeamList());
-      console.log(`Team ${gameState.teams[socket.id].name} disconnected (waiting for reconnect)`);
-    }
-  });
-});
 
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, '0.0.0.0', () => {
-  // Find local IP
-  const interfaces = os.networkInterfaces();
-  let localIP = 'localhost';
-  for (const name of Object.keys(interfaces)) {
-    for (const iface of interfaces[name]) {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        localIP = iface.address;
-        break;
+  const PORT = process.env.PORT || 3000;
+  server.listen(PORT, '0.0.0.0', () => {
+    // Find local IP
+    const interfaces = os.networkInterfaces();
+    let localIP = 'localhost';
+    for (const name of Object.keys(interfaces)) {
+      for (const iface of interfaces[name]) {
+        if (iface.family === 'IPv4' && !iface.internal) {
+          localIP = iface.address;
+          break;
+        }
       }
+      if (localIP !== 'localhost') break;
     }
-    if (localIP !== 'localhost') break;
-  }
 
-  console.log(`\n🎾 Tennis Trivia Server (Team Mode) running on port ${PORT}`);
-  console.log(`\n🔴 PRESENTATORE (PC):   http://localhost:${PORT}/presenter.html`);
-  console.log(`🔵 SQUADRA (Cellulare): http://${localIP}:${PORT}/player.html\n`);
-});
+    console.log(`\n🎾 Tennis Trivia Server (Team Mode) running on port ${PORT}`);
+    console.log(`\n🔴 PRESENTATORE (PC):   http://localhost:${PORT}/presenter.html`);
+    console.log(`🔵 SQUADRA (Cellulare): http://${localIP}:${PORT}/player.html\n`);
+  });

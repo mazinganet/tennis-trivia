@@ -123,36 +123,22 @@
         const answersContainer = document.getElementById('answers-container');
 
         // Listeners
-        // Listeners
         document.getElementById('start-game').addEventListener('click', () => {
             const num = parseInt(document.getElementById('num-questions').value);
             socket.emit('presenter:startGame', num);
         });
 
-        // Add Terminate Button dynamically
-        const controlsDiv = document.querySelector('.controls');
-        if (controlsDiv) {
-            const terminateBtn = document.createElement('button');
-            terminateBtn.id = 'terminate-btn';
-            terminateBtn.className = 'btn-secondary'; // Needs styling but default is ok-ish or inherit
-            terminateBtn.style.background = 'rgba(255,107,107,0.1)';
-            terminateBtn.style.color = '#ff6b6b';
-            terminateBtn.style.border = '1px solid #ff6b6b';
-            terminateBtn.style.borderRadius = '12px';
-            terminateBtn.style.padding = '0.8rem';
-            terminateBtn.style.marginTop = '1rem';
-            terminateBtn.style.width = '100%';
-            terminateBtn.style.cursor = 'pointer';
-            terminateBtn.innerHTML = '⚠️ Termina Partita';
-            terminateBtn.style.display = 'none'; // Hidden initially
-
-            terminateBtn.addEventListener('click', () => {
-                if (confirm('Terminare la partita corrente? Tutti i progressi andranno persi.')) {
-                    socket.emit('presenter:resetGame');
-                }
-            });
-            controlsDiv.appendChild(terminateBtn);
-        }
+        // Add Terminate Button dynamically (Fixed Position Bottom Right)
+        const terminateBtn = document.createElement('button');
+        terminateBtn.id = 'terminate-btn';
+        terminateBtn.className = 'btn-floating-danger';
+        terminateBtn.innerHTML = '❌ Termina';
+        terminateBtn.addEventListener('click', () => {
+            if (confirm('Terminare la partita corrente? Tutti i progressi andranno persi.')) {
+                socket.emit('presenter:resetGame');
+            }
+        });
+        document.body.appendChild(terminateBtn);
 
         nextBtn.addEventListener('click', () => {
             socket.emit('presenter:next');
@@ -179,8 +165,7 @@
         socket.on('game:started', ({ totalQuestions }) => {
             document.getElementById('total-q').textContent = totalQuestions;
             switchScreen('game');
-            const termBtn = document.getElementById('terminate-btn');
-            if (termBtn) termBtn.style.display = 'block';
+            terminateBtn.style.display = 'block';
         });
 
         socket.on('game:question', (q) => {
@@ -189,7 +174,14 @@
             showQuestion(q);
 
             nextBtn.innerHTML = '<span>Mostra Risultati</span>';
+            // Hide next button during question (auto-show results will trigger it back, or manual override)
+            // User did not ask to hide it, but logic says wait for timer. 
+            // However, presenter might want to skip wait. Keeping it visible.
+
             resetProgress();
+
+            // Start local countdown visualization?
+            // Could add a countdown bar or text later.
         });
 
         socket.on('presenter:answerUpdate', ({ answered, total }) => {
@@ -199,10 +191,12 @@
             document.getElementById('progress-bar').style.width = `${pct}%`;
         });
 
-        socket.on('game:result', ({ correctAnswer, teams: t }) => {
+        socket.on('game:result', ({ correctAnswer, teams: t, roundDetails }) => {
             teams = t;
             phase = 'result';
-            updateScoreboard();
+
+            // Update scoreboard with results visualization
+            updateScoreboard(roundDetails);
             revealAnswer(correctAnswer);
 
             nextBtn.innerHTML = '<span>Prossima Domanda</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
@@ -211,6 +205,7 @@
         socket.on('game:over', ({ teams: t }) => {
             teams = t;
             showEndScreen();
+            terminateBtn.style.display = 'none';
         });
 
         // Functions
@@ -226,17 +221,41 @@
             ).join('');
         }
 
-        function updateScoreboard() {
+        function updateScoreboard(roundDetails = null) {
             scoreboard.innerHTML = '';
             teams.forEach(t => {
                 const div = document.createElement('div');
                 div.className = 'team-score';
                 div.style.setProperty('--team-color', t.color);
+
+                // Check result from roundDetails
+                let statusIcon = '';
+                let statusClass = '';
+
+                if (roundDetails) {
+                    const result = roundDetails.find(r => r.teamId === t.id);
+                    if (result) {
+                        if (!result.answered) {
+                            statusIcon = '<span class="status-icon">⏳</span>'; // Dimmed/Time out
+                            statusClass = 'timeout';
+                        } else if (result.isCorrect) {
+                            statusIcon = '<span class="status-icon">✅</span>';
+                            statusClass = 'correct';
+                        } else {
+                            statusIcon = '<span class="status-icon">❌</span>';
+                            statusClass = 'wrong';
+                        }
+                    }
+                }
+
                 div.innerHTML = `
                     <div class="team-indicator"></div>
                     <span class="team-name">${escapeHtml(t.name)}</span>
                     <span class="team-points">${t.score}</span>
+                    ${statusIcon}
                 `;
+                if (statusClass) div.classList.add(statusClass);
+
                 scoreboard.appendChild(div);
             });
         }
