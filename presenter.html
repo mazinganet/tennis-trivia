@@ -193,6 +193,7 @@
             const timerDisplay = document.getElementById('timer-display');
             timerDisplay.textContent = timeLeft;
             timerDisplay.classList.add('active'); // Pulse animation
+            timerDisplay.classList.remove('urgent'); // Reset urgent state
 
             // Visual countdown locally (synced roughly)
             let localTime = timeLeft;
