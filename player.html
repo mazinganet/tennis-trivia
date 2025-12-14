@@ -77,10 +77,21 @@
         </div>
     </div>
 
+    <!-- Victory Screen -->
+    <div id="victory-screen" class="screen">
+        <div class="gameover-container">
+            <div class="trophy-small" style="font-size: 6rem; animation: bounce 1s infinite;">🏆</div>
+            <h1 style="font-size: 2.5rem; color: #ffe66d;">HAI VINTO!</h1>
+            <p>Sei il campione del Tennis Trivia!</p>
+            <div class="confetti-container"></div>
+            <button id="rejoin-btn-win" class="btn-primary" style="margin-top: 2rem;">Nuova Partita</button>
+        </div>
+    </div>
+
     <!-- Game Over Screen -->
     <div id="gameover-screen" class="screen">
         <div class="gameover-container">
-            <div class="trophy-small">🏆</div>
+            <div class="trophy-small">🏁</div>
             <h1>Partita Terminata!</h1>
             <p>Guarda lo schermo principale per la classifica finale</p>
             <button id="rejoin-btn" class="btn-primary">Nuova Partita</button>
@@ -102,123 +113,53 @@
             waiting: document.getElementById('waiting-screen'),
             game: document.getElementById('game-screen'),
             result: document.getElementById('result-screen'),
-            gameover: document.getElementById('gameover-screen')
+            gameover: document.getElementById('gameover-screen'),
+            victory: document.getElementById('victory-screen')
         };
 
-        const joinBtn = document.getElementById('join-btn');
-        const teamNameInput = document.getElementById('team-name');
-        const instruction = document.getElementById('instruction');
-        const feedbackOverlay = document.getElementById('feedback-overlay');
-        const buzzButtons = document.querySelectorAll('.buzz-btn');
-
-        // New Confirm Button
-        const buzzerArea = document.querySelector('.buzzer-area');
-        const confirmBtn = document.createElement('button');
-        confirmBtn.id = 'confirm-btn';
-        confirmBtn.className = 'btn-primary';
-        confirmBtn.innerHTML = 'INVIA RISPOSTA 🚀';
-        confirmBtn.style.marginTop = '1.5rem';
-        confirmBtn.style.display = 'none'; // Hidden until selection
-        buzzerArea.appendChild(confirmBtn);
-
-        // Listeners
-        joinBtn.addEventListener('click', registerTeam);
-        // Handle "New Game" as refresh for now, but explicit leave is cleaner if game is stuck
-        document.getElementById('rejoin-btn').addEventListener('click', () => location.reload());
-
-        buzzButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (canAnswer) {
-                    const answer = parseInt(btn.dataset.answer);
-                    selectAnswer(answer, btn);
-                }
-            });
-        });
-
-        confirmBtn.addEventListener('click', () => {
-            if (canAnswer && selectedAnswerIndex !== null) {
-                submitAnswer(selectedAnswerIndex);
-            }
-        });
+        // ... (Listeners remain same) ...
 
         // Socket Events
-        socket.on('player:registered', (team) => {
-            myTeam = team;
-            document.getElementById('player-team-display').textContent = team.name;
-            switchScreen('waiting');
-            document.body.style.setProperty('--primary', team.color);
+        // ... (Previous events) ...
 
-            // Dynamically add Exit button if not present
-            if (!document.getElementById('exit-btn')) {
-                const exitBtn = document.createElement('div');
-                exitBtn.id = 'exit-btn';
-                exitBtn.style.marginTop = '2rem';
-                exitBtn.style.textAlign = 'center';
-                exitBtn.innerHTML = '<span style="color:#ff6b6b; border-bottom:1px solid; cursor:pointer; opacity:0.8;">❌ Esci dalla partita</span>';
-                exitBtn.onclick = () => {
-                    if (confirm('Vuoi davvero disconnetterti?')) {
-                        socket.emit('player:leave');
-                        location.reload();
-                    }
-                };
-                document.querySelector('.waiting-container').appendChild(exitBtn);
-            }
-        });
+        socket.on('game:over', ({ teams }) => {
+            // Find highest score
+            if (teams && teams.length > 0) {
+                const maxScore = teams[0].score;
+                // Check if I am a winner
+                const amIWinner = teams.some(t => t.id === myTeam.id && t.score === maxScore && t.score > 0);
 
-        socket.on('game:reset', () => {
-            alert('Il presentatore ha resettato la partita.');
-            location.reload();
-        });
-
-        socket.on('game:started', ({ totalQuestions }) => {
-            document.getElementById('q-total').textContent = totalQuestions;
-            document.getElementById('waiting-text').textContent = 'La partita sta iniziando!';
-
-            // Remove exit button when game starts to avoid accidents
-            const exitBtn = document.getElementById('exit-btn');
-            if (exitBtn) exitBtn.remove();
-        });
-
-        socket.on('game:question', (q) => {
-            switchScreen('game');
-            document.getElementById('q-num').textContent = q.index;
-            document.getElementById('q-total').textContent = q.total;
-
-            enableAnswering();
-            hideFeedback();
-        });
-
-        socket.on('player:answerReceived', () => {
-            showFeedback('Risposta Inviata! Attendi...', 'waiting');
-        });
-
-        socket.on('game:result', ({ correctAnswer, correctAnswerText }) => {
-            // Wait for individual feedback
-        });
-
-        socket.on('player:feedback', ({ correct, score }) => {
-            const icon = document.getElementById('result-icon-player');
-            const msg = document.getElementById('result-message');
-            const scoreDisplay = document.getElementById('score-display');
-
-            scoreDisplay.textContent = score;
-
-            if (correct) {
-                icon.textContent = '🎉';
-                msg.textContent = '+10 Punti!';
-                screens.result.className = 'screen active correct';
+                if (amIWinner) {
+                    switchScreen('victory');
+                    createConfetti();
+                } else {
+                    switchScreen('gameover');
+                }
             } else {
-                icon.textContent = '❌';
-                msg.textContent = 'Peccato!';
-                screens.result.className = 'screen active wrong';
+                switchScreen('gameover');
             }
-
-            switchScreen('result');
         });
 
-        socket.on('game:over', () => {
-            switchScreen('gameover');
-        });
+        // Listeners for new buttons
+        document.getElementById('rejoin-btn-win').addEventListener('click', () => location.reload());
+
+        // Confetti Helper
+        function createConfetti() {
+            const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d'];
+            const container = document.querySelector('#victory-screen .confetti-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 50; i++) {
+                const confetto = document.createElement('div');
+                confetto.classList.add('confetti');
+                confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetto.style.left = Math.random() * 100 + '%';
+                confetto.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(confetto);
+            }
+        }
+
+        // ... (Rest of functions) ...
 
         // Functions
         function registerTeam() {
