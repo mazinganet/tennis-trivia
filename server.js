@@ -326,57 +326,48 @@ io.on('connection', (socket) => {
     // Notify player
     socket.emit('player:answerReceived');
 
-    socket.on('player:answer', (answerIndex) => {
-      if (gameState.phase !== 'question') return;
-      if (gameState.answers[socket.id] !== undefined) return; // Already answered
+    // Notify presenter (update counts)
+    const connectedTeams = Object.keys(gameState.teams).filter(id => gameState.teams[id].connected).length;
+    const answeredCount = Object.keys(gameState.answers).length;
 
-      gameState.answers[socket.id] = answerIndex;
-
-      // Notify player
-      socket.emit('player:answerReceived');
-
-      // Notify presenter (update counts)
-      const connectedTeams = Object.keys(gameState.teams).filter(id => gameState.teams[id].connected).length;
-      const answeredCount = Object.keys(gameState.answers).length;
-
-      io.to('presenter').emit('presenter:answerUpdate', {
-        answered: answeredCount,
-        total: connectedTeams
-      });
-
-      // Check if ALL answered
-      if (answeredCount >= connectedTeams) {
-        showResults();
-      }
+    io.to('presenter').emit('presenter:answerUpdate', {
+      answered: answeredCount,
+      total: connectedTeams
     });
 
-    socket.on('disconnect', () => {
-      if (gameState.teams[socket.id]) {
-        gameState.teams[socket.id].connected = false;
-        // Notify presenter but don't delete immediately (wait for reconnect)
-        io.to('presenter').emit('presenter:updateTeams', getTeamList());
-        console.log(`Team ${gameState.teams[socket.id].name} disconnected (waiting for reconnect)`);
-      }
-    });
-  });
-
-
-  const PORT = process.env.PORT || 3000;
-  server.listen(PORT, '0.0.0.0', () => {
-    // Find local IP
-    const interfaces = os.networkInterfaces();
-    let localIP = 'localhost';
-    for (const name of Object.keys(interfaces)) {
-      for (const iface of interfaces[name]) {
-        if (iface.family === 'IPv4' && !iface.internal) {
-          localIP = iface.address;
-          break;
-        }
-      }
-      if (localIP !== 'localhost') break;
+    // Check if ALL answered
+    if (answeredCount >= connectedTeams) {
+      showResults();
     }
-
-    console.log(`\n🎾 Tennis Trivia Server (Team Mode) running on port ${PORT}`);
-    console.log(`\n🔴 PRESENTATORE (PC):   http://localhost:${PORT}/presenter.html`);
-    console.log(`🔵 SQUADRA (Cellulare): http://${localIP}:${PORT}/player.html\n`);
   });
+
+  socket.on('disconnect', () => {
+    if (gameState.teams[socket.id]) {
+      gameState.teams[socket.id].connected = false;
+      // Notify presenter but don't delete immediately (wait for reconnect)
+      io.to('presenter').emit('presenter:updateTeams', getTeamList());
+      console.log(`Team ${gameState.teams[socket.id].name} disconnected (waiting for reconnect)`);
+    }
+  });
+});
+
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, '0.0.0.0', () => {
+  // Find local IP
+  const interfaces = os.networkInterfaces();
+  let localIP = 'localhost';
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        localIP = iface.address;
+        break;
+      }
+    }
+    if (localIP !== 'localhost') break;
+  }
+
+  console.log(`\n🎾 Tennis Trivia Server (Team Mode) running on port ${PORT}`);
+  console.log(`\n🔴 PRESENTATORE (PC):   http://localhost:${PORT}/presenter.html`);
+  console.log(`🔵 SQUADRA (Cellulare): http://${localIP}:${PORT}/player.html\n`);
+});
