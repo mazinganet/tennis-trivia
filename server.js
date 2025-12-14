@@ -245,6 +245,13 @@ io.on('connection', (socket) => {
     let existingId = Object.keys(gameState.teams).find(id => gameState.teams[id].name === name);
 
     if (existingId) {
+      const oldTeam = gameState.teams[existingId];
+      if (oldTeam.connected) {
+        // Name taken by active player
+        socket.emit('player:error', 'Nome squadra già utilizzato! Scegline un altro.');
+        return;
+      }
+
       // Reconnect logic: update socket ID
       const oldData = gameState.teams[existingId];
       delete gameState.teams[existingId]; // Remove old ID key
@@ -263,6 +270,9 @@ io.on('connection', (socket) => {
 
       console.log(`Team ${name} reconnected (ID: ${existingId} -> ${socket.id})`);
     } else {
+      // Check if name exists but was not caught (should be covered above, but double check)
+      // Actually above covers it.
+
       // New registration
       gameState.teams[socket.id] = {
         id: socket.id,

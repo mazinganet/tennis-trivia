@@ -268,6 +268,26 @@
         function hideFeedback() {
             feedbackOverlay.classList.remove('active');
         }
+
+        // Error Handling
+        socket.on('player:error', (msg) => {
+            alert(msg);
+        });
+
+        // Back Button Guard
+        history.pushState(null, document.title, location.href);
+        window.addEventListener('popstate', function (event) {
+            if (myTeam) {
+                // If in game
+                const leave = confirm("Vuoi davvero uscire dal gioco?");
+                if (leave) {
+                    socket.emit('player:leave');
+                    history.back(); // Let it go back
+                } else {
+                    history.pushState(null, document.title, location.href); // Stay here
+                }
+            }
+        });
     </script>
 </body>
 
