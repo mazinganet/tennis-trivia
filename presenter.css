@@ -724,3 +724,31 @@ body {
         justify-content: space-between;
     }
 }
+/* Special Question Styles */
+.question-card.special-question {
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+.category-badge.special {
+    background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    animation: pulseGold 2s infinite;
+}
+
+@keyframes pulseGold {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}

@@ -178,6 +178,19 @@
             phase = 'question';
             showQuestion(q);
 
+            // Special Question Handling
+            const card = document.querySelector('.question-card');
+            const badge = document.getElementById('category-badge');
+
+            if (q.isSpecial) {
+                card.classList.add('special-question');
+                badge.textContent = '★ DOMANDA SPECIALE (X2) ★';
+                badge.classList.add('special');
+            } else {
+                card.classList.remove('special-question');
+                badge.classList.remove('special');
+            }
+
             nextBtn.innerHTML = '<span>Mostra Risultati</span>';
             // Hide next button during question (auto-show results will trigger it back, or manual override)
             // User did not ask to hide it, but logic says wait for timer. 

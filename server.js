@@ -69,6 +69,18 @@ io.on('connection', (socket) => {
 
   socket.on('presenter:startGame', (numQuestions) => {
     gameState.questions = shuffleArray(tennisQuestions).slice(0, numQuestions || 15);
+
+    // Select Special Questions (25%)
+    const numSpecial = Math.floor(gameState.questions.length * 0.25);
+    const specialIndices = new Set();
+    while (specialIndices.size < numSpecial) {
+      specialIndices.add(Math.floor(Math.random() * gameState.questions.length));
+    }
+
+    gameState.questions.forEach((q, i) => {
+      q.isSpecial = specialIndices.has(i);
+    });
+
     gameState.currentQuestionIndex = -1;
     gameState.gameStarted = true;
     gameState.phase = 'game';
@@ -121,7 +133,7 @@ io.on('connection', (socket) => {
     }
 
     gameState.phase = 'question';
-    gameState.answers = {};
+    gameState.answers = {}; // stores { index, time }
 
     const q = gameState.questions[gameState.currentQuestionIndex];
     gameState.currentQuestion = {
@@ -130,6 +142,7 @@ io.on('connection', (socket) => {
       category: q.category,
       question: q.question,
       answers: q.answers,
+      isSpecial: q.isSpecial, // Send special flag
       // Don't send 'correct' yet to players
     };
 
@@ -145,7 +158,8 @@ io.on('connection', (socket) => {
       total: gameState.currentQuestion.total,
       category: gameState.currentQuestion.category,
       question: gameState.currentQuestion.question,
-      answers: gameState.currentQuestion.answers
+      answers: gameState.currentQuestion.answers,
+      isSpecial: q.isSpecial
     });
 
     startTimer();
@@ -159,25 +173,50 @@ io.on('connection', (socket) => {
     const q = gameState.questions[gameState.currentQuestionIndex];
     const correctAnswer = q.correct;
 
+    // Filter correct answers to determine rank
+    let correctAnswersList = [];
+    Object.keys(gameState.answers).forEach(socketId => {
+      const ans = gameState.answers[socketId];
+      if (ans.index === correctAnswer) {
+        correctAnswersList.push({ id: socketId, time: ans.time });
+      }
+    });
+
+    // Sort by time (ascending - assuming earlier time is smaller timestamp)
+    correctAnswersList.sort((a, b) => a.time - b.time);
+
+    // Create map of ID -> Rank (0-based)
+    const rankMap = {};
+    correctAnswersList.forEach((item, idx) => {
+      rankMap[item.id] = idx;
+    });
+
     // Calculate scores
     let roundResults = []; // { teamName, correct, earned }
 
-    Object.keys(gameState.teams).forEach(teamId => { // Iterate ALL teams, even if they didn't answer
+    Object.keys(gameState.teams).forEach(teamId => { // Iterate ALL teams
       const team = gameState.teams[teamId];
       if (!team.connected) return;
 
-      const answer = gameState.answers[teamId];
-      const answered = answer !== undefined;
-      const isCorrect = answer === correctAnswer;
+      const answerObj = gameState.answers[teamId];
+      const answered = answerObj !== undefined;
+      const isCorrect = answered && answerObj.index === correctAnswer;
 
+      let points = 0;
       if (isCorrect) {
-        team.score += 10;
+        // Points: 10 for 1st, 9 for 2nd... min 1
+        const rank = rankMap[teamId];
+        const basePoints = Math.max(1, 10 - rank);
+
+        points = q.isSpecial ? basePoints * 2 : basePoints;
+        team.score += points;
       }
 
       roundResults.push({
         teamId: teamId,
         isCorrect: isCorrect,
-        answered: answered
+        answered: answered,
+        points: points // Send points earned this round
       });
     });
 
@@ -185,7 +224,7 @@ io.on('connection', (socket) => {
     io.to('presenter').emit('game:result', {
       correctAnswer: correctAnswer,
       teams: getTeamList(),
-      roundDetails: roundResults // Send who got it right/wrong
+      roundDetails: roundResults
     });
 
     // Notify Players (individual feedback)
@@ -199,7 +238,8 @@ io.on('connection', (socket) => {
       io.to(res.teamId).emit('player:feedback', {
         correct: res.isCorrect,
         answered: res.answered,
-        score: gameState.teams[res.teamId].score
+        score: gameState.teams[res.teamId].score,
+        earned: res.points
       });
     });
   }
@@ -331,7 +371,10 @@ io.on('connection', (socket) => {
     if (gameState.phase !== 'question') return;
     if (gameState.answers[socket.id] !== undefined) return; // Already answered
 
-    gameState.answers[socket.id] = answerIndex;
+    gameState.answers[socket.id] = {
+      index: answerIndex,
+      time: Date.now()
+    };
 
     // Notify player
     socket.emit('player:answerReceived');

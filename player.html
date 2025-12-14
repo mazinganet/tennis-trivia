@@ -196,6 +196,16 @@
             document.getElementById('q-num').textContent = q.index;
             document.getElementById('q-total').textContent = q.total;
 
+            const header = document.querySelector('.game-header');
+            if (q.isSpecial) {
+                header.classList.add('special');
+                header.innerHTML = `<div style="color:#ffd700; font-weight:800; font-size:1.2rem; margin-bottom:0.5rem;">★ DOMANDA SPECIALE X2 ★</div>` +
+                    `<span class="question-counter">Domanda <span id="q-num">${q.index}</span>/<span id="q-total">${q.total}</span></span>`;
+            } else {
+                header.classList.remove('special');
+                header.innerHTML = `<span class="question-counter">Domanda <span id="q-num">${q.index}</span>/<span id="q-total">${q.total}</span></span>`;
+            }
+
             enableAnswering();
             hideFeedback();
         });
