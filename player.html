@@ -117,6 +117,22 @@
             victory: document.getElementById('victory-screen')
         };
 
+        const joinBtn = document.getElementById('join-btn');
+        const teamNameInput = document.getElementById('team-name');
+        const instruction = document.getElementById('instruction');
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const buzzButtons = document.querySelectorAll('.buzz-btn');
+
+        // New Confirm Button
+        const buzzerArea = document.querySelector('.buzzer-area');
+        const confirmBtn = document.createElement('button');
+        confirmBtn.id = 'confirm-btn';
+        confirmBtn.className = 'btn-primary';
+        confirmBtn.innerHTML = 'INVIA RISPOSTA 🚀';
+        confirmBtn.style.marginTop = '1.5rem';
+        confirmBtn.style.display = 'none'; // Hidden until selection
+        buzzerArea.appendChild(confirmBtn);
+
         // Listeners
         joinBtn.addEventListener('click', registerTeam);
         // Handle "New Game" as refresh for now, but explicit leave is cleaner if game is stuck
