@@ -752,3 +752,51 @@ body {
         box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
     }
 }
+/* Team Rank Badge */
+.team-rank {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    min-width: 24px;
+    text-align: center;
+}
+/* Configuration Items */
+.questions-config {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.config-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.config-item label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.config-item select {
+    background: var(--secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    min-width: 100px;
+    cursor: pointer;
+}
+
+.config-item select:focus {
+    outline: none;
+    border-color: var(--primary);
+}

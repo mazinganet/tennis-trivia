@@ -29,13 +29,26 @@
                 </div>
 
                 <div class="questions-config">
-                    <label for="num-questions">Numero domande:</label>
-                    <select id="num-questions">
-                        <option value="10">10</option>
-                        <option value="15" selected>15</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                    </select>
+                    <div class="config-item">
+                        <label for="num-questions">Domande:</label>
+                        <select id="num-questions">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15" selected>15</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+
+                    <div class="config-item">
+                        <label for="time-limit">Tempo (s):</label>
+                        <select id="time-limit">
+                            <option value="10">10s</option>
+                            <option value="15" selected>15s</option>
+                            <option value="20">20s</option>
+                            <option value="30">30s</option>
+                        </select>
+                    </div>
                 </div>
 
                 <button id="start-game" class="btn-primary">
@@ -81,8 +94,8 @@
 
             <!-- Right: Controls -->
             <div class="controls-section">
-                <button id="next-btn" class="btn-primary">
-                    <span>Mostra Risultati</span>
+                <button id="next-btn" class="btn-primary" disabled style="opacity:0.5; cursor:not-allowed;">
+                    <span>Attendi...</span>
                 </button>
 
                 <div id="timer-display" class="timer-display">15</div>
@@ -135,7 +148,8 @@
         // Listeners
         document.getElementById('start-game').addEventListener('click', () => {
             const num = parseInt(document.getElementById('num-questions').value);
-            socket.emit('presenter:startGame', num);
+            const time = parseInt(document.getElementById('time-limit').value);
+            socket.emit('presenter:startGame', { num, time });
         });
 
         // Terminate Button Logic
@@ -146,7 +160,10 @@
         });
 
         nextBtn.addEventListener('click', () => {
-            socket.emit('presenter:next');
+            // Only allow if active (not disabled) logic
+            if (!nextBtn.disabled) {
+                socket.emit('presenter:next');
+            }
         });
 
         document.getElementById('new-game').addEventListener('click', () => {
@@ -236,7 +253,11 @@
             updateScoreboard(roundDetails);
             revealAnswer(correctAnswer);
 
+            // Enable Next Button
             nextBtn.innerHTML = '<span>Prossima Domanda</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+            nextBtn.disabled = false;
+            nextBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
         });
 
         socket.on('game:over', ({ teams: t }) => {
@@ -260,7 +281,7 @@
 
         function updateScoreboard(roundDetails = null) {
             scoreboard.innerHTML = '';
-            teams.forEach(t => {
+            teams.forEach((t, index) => {
                 const div = document.createElement('div');
                 div.className = 'team-score';
                 div.style.setProperty('--team-color', t.color);
@@ -286,6 +307,7 @@
                 }
 
                 div.innerHTML = `
+                    <div class="team-rank">#${index + 1}</div>
                     <div class="team-indicator"></div>
                     <span class="team-name">${escapeHtml(t.name)}</span>
                     <span class="team-points">${t.score}</span>

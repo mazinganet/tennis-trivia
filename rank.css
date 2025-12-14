@@ -1,0 +1,12 @@
+/* Team Rank Badge */
+.team-rank {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    min-width: 24px;
+    text-align: center;
+}
