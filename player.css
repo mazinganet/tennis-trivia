@@ -367,4 +367,11 @@ body {
     background: linear-gradient(135deg, var(--warning) 0%, #ffa500 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}/* Selected answer state */
+.buzz-btn.selected {
+    background: var(--primary);
+    color: var(--secondary);
+    border-color: var(--secondary);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--primary);
 }

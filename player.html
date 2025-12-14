@@ -94,6 +94,7 @@
         // State
         let myTeam = null;
         let canAnswer = false;
+        let selectedAnswerIndex = null;
 
         // Elements
         const screens = {
@@ -110,6 +111,16 @@
         const feedbackOverlay = document.getElementById('feedback-overlay');
         const buzzButtons = document.querySelectorAll('.buzz-btn');
 
+        // New Confirm Button
+        const buzzerArea = document.querySelector('.buzzer-area');
+        const confirmBtn = document.createElement('button');
+        confirmBtn.id = 'confirm-btn';
+        confirmBtn.className = 'btn-primary';
+        confirmBtn.innerHTML = 'INVIA RISPOSTA 🚀';
+        confirmBtn.style.marginTop = '1.5rem';
+        confirmBtn.style.display = 'none'; // Hidden until selection
+        buzzerArea.appendChild(confirmBtn);
+
         // Listeners
         joinBtn.addEventListener('click', registerTeam);
         // Handle "New Game" as refresh for now, but explicit leave is cleaner if game is stuck
@@ -119,9 +130,15 @@
             btn.addEventListener('click', () => {
                 if (canAnswer) {
                     const answer = parseInt(btn.dataset.answer);
-                    submitAnswer(answer, btn);
+                    selectAnswer(answer, btn);
                 }
             });
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            if (canAnswer && selectedAnswerIndex !== null) {
+                submitAnswer(selectedAnswerIndex);
+            }
         });
 
         // Socket Events
@@ -211,18 +228,27 @@
             }
         }
 
-        function submitAnswer(index, btn) {
+        function selectAnswer(index, btn) {
+            selectedAnswerIndex = index;
+
+            // Visual feedback
+            buzzButtons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            // Show confirm
+            confirmBtn.style.display = 'block';
+        }
+
+        function submitAnswer(index) {
             canAnswer = false;
             socket.emit('player:answer', index);
-
-            buzzButtons.forEach(b => {
-                b.classList.add('disabled');
-                if (b === btn) b.classList.add('selected');
-            });
+            confirmBtn.style.display = 'none';
         }
 
         function enableAnswering() {
             canAnswer = true;
+            selectedAnswerIndex = null;
+            confirmBtn.style.display = 'none';
             instruction.textContent = 'Scegli la risposta!';
             buzzButtons.forEach(btn => {
                 btn.classList.remove('disabled', 'selected', 'correct', 'wrong');

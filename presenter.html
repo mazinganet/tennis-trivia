@@ -68,8 +68,9 @@
             <div id="answers-container" class="answers-grid"></div>
         </div>
 
-        <!-- Progress Bar -->
+        <!-- Progress Bar & Timer -->
         <div class="progress-container">
+            <div id="timer-display" class="timer-display">15</div> <!-- New Timer -->
             <div class="progress-text">Hanno risposto: <span id="answered-count">0</span> / <span
                     id="total-teams">0</span></div>
             <div class="progress-bar-bg">
@@ -78,7 +79,7 @@
         </div>
 
         <!-- Controls -->
-        <div class="controls">
+        <div class="controls" style="bottom: 40px;"> <!-- Lifted up slightly -->
             <button id="next-btn" class="btn-primary">
                 <span>Mostra Risultati</span>
             </button>
@@ -182,6 +183,24 @@
 
             // Start local countdown visualization?
             // Could add a countdown bar or text later.
+        });
+
+        socket.on('game:timer', ({ timeLeft }) => {
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.textContent = timeLeft;
+            timerDisplay.classList.add('active'); // Pulse animation
+
+            // Visual countdown locally (synced roughly)
+            let localTime = timeLeft;
+            const interval = setInterval(() => {
+                localTime--;
+                if (localTime >= 0) timerDisplay.textContent = localTime;
+                if (localTime <= 5) timerDisplay.classList.add('urgent');
+                if (localTime <= 0) clearInterval(interval);
+            }, 1000);
+
+            // Clear interval on next question
+            socket.once('game:result', () => clearInterval(interval));
         });
 
         socket.on('presenter:answerUpdate', ({ answered, total }) => {
