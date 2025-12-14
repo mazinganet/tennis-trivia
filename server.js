@@ -67,8 +67,20 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('presenter:startGame', (numQuestions) => {
-    gameState.questions = shuffleArray(tennisQuestions).slice(0, numQuestions || 15);
+  socket.on('presenter:startGame', (data) => {
+    // Check if data is object or number (backward compatibility safe)
+    let numQuestions = 15;
+    let timeLimit = 15;
+
+    if (typeof data === 'object') {
+      numQuestions = parseInt(data.num) || 15;
+      timeLimit = parseInt(data.time) || 15;
+    } else if (typeof data === 'number') {
+      numQuestions = data;
+    }
+
+    gameState.questions = shuffleArray(tennisQuestions).slice(0, numQuestions);
+    gameState.timeLimit = timeLimit;
 
     // Select Special Questions (25%)
     const numSpecial = Math.floor(gameState.questions.length * 0.25);
@@ -109,7 +121,7 @@ io.on('connection', (socket) => {
 
   function startTimer() {
     if (gameTimer) clearInterval(gameTimer);
-    let timeLeft = TIME_LIMIT;
+    let timeLeft = gameState.timeLimit || 15;
 
     // Notify clients of timer start
     io.emit('game:timer', { timeLeft });
