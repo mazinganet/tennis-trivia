@@ -531,6 +531,50 @@ const tennisQuestions = [
         question: "Quale azienda ha inventato la racchetta in metallo (modello T2000 usata da Connors)?",
         answers: ["Wilson", "Prince", "Dunlop", "Head"],
         correct: 0
+    },
+
+    // ==================== APPROFONDIMENTO TECNICA (STANCE & MOVIMENTO) ====================
+    {
+        category: "Tecnica",
+        question: "Nella 'Open Stance' (posizione aperta), come sono posizionati i piedi rispetto alla rete?",
+        answers: ["Paralleli alla rete", "Perpendicolari alla rete", "Uno avanti e uno indietro", "Incrociati"],
+        correct: 0
+    },
+    {
+        category: "Tecnica",
+        question: "In quale situazione tattica è preferibile utilizzare la 'Neutral Stance' (piedi di fianco)?",
+        answers: ["Quando si avanza verso la rete per attaccare", "Quando si è in difesa estrema laterale", "Per rispondere a un servizio veloce", "Nello scambio da fondo campo veloce"],
+        correct: 0
+    },
+    {
+        category: "Tecnica",
+        question: "Cosa si intende per 'Dritto a sventaglio' (Inside-out Forehand)?",
+        answers: ["Colpire di dritto dall'angolo del rovescio verso l'angolo opposto", "Colpire di dritto in lungolinea", "Colpire un dritto con rotazione slice", "Colpire il dritto saltando"],
+        correct: 0
+    },
+    {
+        category: "Tecnica",
+        question: "Cos'è la 'Catena Cinetica' nel tennis?",
+        answers: ["Il trasferimento di energia sequenziale (piedi-gambe-busto-braccio)", "La sequenza di partite in un torneo", "Il movimento del polso al contatto", "La rotazione della palla in aria"],
+        correct: 0
+    },
+    {
+        category: "Tecnica",
+        question: "Quale impugnatura (Grip) favorisce il massimo Topspin ma rende difficili le palle basse?",
+        answers: ["Western", "Eastern", "Continental", "Semi-Western"],
+        correct: 0
+    },
+    {
+        category: "Tecnica",
+        question: "A quale fase del servizio si riferisce il termine 'Trophy Position'?",
+        answers: ["Al caricamento (ginocchia piegate, racchetta alta)", "All'impatto con la palla", "Al lancio di palla", "All'atterraggio dopo il salto"],
+        correct: 0
+    },
+    {
+        category: "Tecnica",
+        question: "Quale passo si utilizza per recuperare velocemente il centro del campo dopo un colpo laterale?",
+        answers: ["Passo incrociato (Crossover step)", "Passo laterale (Side shuffle)", "Corsa all'indietro", "Salto a piedi pari"],
+        correct: 0
     }
 ];
 
