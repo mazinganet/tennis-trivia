@@ -480,6 +480,56 @@ const tennisQuestions = [
         question: "Chi fu l'ultimo tennista a vincere Wimbledon usando una racchetta di legno (1975)?",
         answers: ["Björn Borg", "Arthur Ashe", "Jimmy Connors", "John McEnroe"],
         correct: 1
+    },
+
+    // ==================== LIVELLO IMPOSSIBILE (NERD) ====================
+    {
+        category: "Storia",
+        question: "Chi perse la finale contro Roger Federer al suo PRIMO titolo ATP (Milano 2001)?",
+        answers: ["Julien Boutter", "Hicham Arazi", "Greg Rusedski", "Yevgeny Kafelnikov"],
+        correct: 0
+    },
+    {
+        category: "Curiosità",
+        question: "Quante mucche servono (circa) per produrre il budello naturale per UNA sola racchetta?",
+        answers: ["1", "3", "5", "10"],
+        correct: 1
+    },
+    {
+        category: "Record",
+        question: "Quale giocatore ha commesso 26 doppi falli in un match vincendolo comunque (Wimbledon 1995)?",
+        answers: ["Goran Ivanisevic", "Marc Rosset", "Richard Krajicek", "Todd Martin"],
+        correct: 1
+    },
+    {
+        category: "Regole",
+        question: "Qual è il peso minimo regolamentare di una pallina da tennis (Tipo 2)?",
+        answers: ["56.0 grammi", "57.7 grammi", "58.5 grammi", "55.5 grammi"],
+        correct: 0
+    },
+    {
+        category: "Leggende",
+        question: "Chi è l'unico giocatore nella storia ad aver vinto Wimbledon partecipando come Wild Card?",
+        answers: ["Goran Ivanisevic", "Boris Becker", "Andre Agassi", "Lleyton Hewitt"],
+        correct: 0
+    },
+    {
+        category: "Storia",
+        question: "Chi ha vinto l'oro olimpico in singolare maschile a Parigi 1924 (l'ultimo prima del 1988)?",
+        answers: ["Vincent Richards", "René Lacoste", "Bill Tilden", "Henri Cochet"],
+        correct: 0
+    },
+    {
+        category: "Punteggio",
+        question: "Come finì il famoso tie-break del 4° set tra Borg e McEnroe a Wimbledon 1980?",
+        answers: ["18-16 per McEnroe", "20-18 per Borg", "16-14 per McEnroe", "15-13 per Borg"],
+        correct: 0
+    },
+    {
+        category: "Attrezzatura",
+        question: "Quale azienda ha inventato la racchetta in metallo (modello T2000 usata da Connors)?",
+        answers: ["Wilson", "Prince", "Dunlop", "Head"],
+        correct: 0
     }
 ];
 
