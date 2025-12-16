@@ -575,6 +575,44 @@ const tennisQuestions = [
         question: "Quale passo si utilizza per recuperare velocemente il centro del campo dopo un colpo laterale?",
         answers: ["Passo incrociato (Crossover step)", "Passo laterale (Side shuffle)", "Corsa all'indietro", "Salto a piedi pari"],
         correct: 0
+    },
+
+    // ==================== LEGGENDE DEL CLUB (CUSTOM) ====================
+    {
+        category: "Leggende",
+        question: "Quale Giocatore ha la miglior smorzata del circuito ATP?",
+        answers: ["Ruggero Cantelli", "Marco Storoni", "Fabiano Urbinati", "Renzi Roberto"],
+        correct: 0
+    },
+    {
+        category: "Leggende",
+        question: "Quale giocatore ha il miglior rovescio a una mano?",
+        answers: ["Tognacci Max", "Spada Francesco", "Storoni Marco", "Piuma Marco"],
+        correct: 3
+    },
+    {
+        category: "Leggende",
+        question: "Quale giocatore ha il miglior rovescio a una mano del circuito ATP?",
+        answers: ["Tognacci Max", "Spada Francesco", "Storoni Marco", "Piuma Marco"],
+        correct: 3
+    },
+    {
+        category: "Leggende",
+        question: "Quale giocatore/trice ha il miglior rovescio a 2 mani del circuito ATP/WTA?",
+        answers: ["Lazzarini Aldo", "Razzani Erika", "Jessica Barbieri", "Alice Belli"],
+        correct: 2
+    },
+    {
+        category: "Leggende",
+        question: "Quale giocatore ha la miglior volèe del circuito ATP?",
+        answers: ["Piccolo Luigi", "Venditti Adolfo", "Rinaldi Roberto", "Mario Russo"],
+        correct: 3
+    },
+    {
+        category: "Leggende",
+        question: "Quale giocatore ha vinto più volte il riconoscimento per il fair play?",
+        answers: ["Roberto Sacchini", "Roger Federer", "Jannik Sinner", "Carlos Alcaraz"],
+        correct: 0
     }
 ];
 
