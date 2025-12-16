@@ -190,6 +190,37 @@ const tennisQuestions = [
         correct: 0
     },
 
+    {
+        category: "Tecnica",
+        question: "Cosa si intende per 'Pronazione' nel servizio?",
+        answers: ["Flessione del polso", "Rotazione dell'avambraccio", "Estensione del gomito", "Caricamento delle gambe"],
+        correct: 1
+    },
+    {
+        category: "Tecnica",
+        question: "Qual è lo scopo principale dello 'Split Step'?",
+        answers: ["Generare potenza", "Ingannare l'avversario", "Attivare la reattività", "Recuperare posizione"],
+        correct: 2
+    },
+    {
+        category: "Tecnica",
+        question: "Nel dritto moderno, il movimento 'tergicristallo' serve principalmente a:",
+        answers: ["Aumentare la potenza piatta", "Generare Topspin estremo", "Creare un effetto Slice", "Smorzare la palla"],
+        correct: 1
+    },
+    {
+        category: "Tecnica",
+        question: "Quale fase del colpo segue immediatamente l'impatto con la palla?",
+        answers: ["Backswing", "Split Step", "Follow-through", "Ready position"],
+        correct: 2
+    },
+    {
+        category: "Tecnica",
+        question: "Come viene definita la zona di impatto ideale rispetto al corpo?",
+        answers: ["Dietro al corpo", "A fianco del corpo", "Davanti al corpo", "Sopra la testa"],
+        correct: 2
+    },
+
     // ==================== TORNEI ====================
     {
         category: "Tornei",
@@ -350,6 +381,43 @@ const tennisQuestions = [
         question: "Quando è iniziata l'Era Open del tennis?",
         answers: ["1960", "1968", "1975", "1980"],
         correct: 1
+    },
+    // ==================== RECORD E LEGGENDE ====================
+    {
+        category: "Storia",
+        question: "Chi è l'unico tennista ad aver completato il Grande Slam (tutti e 4 nello stesso anno) per due volte?",
+        answers: ["Roger Federer", "Rod Laver", "Novak Djokovic", "Don Budge"],
+        correct: 1
+    },
+    {
+        category: "Storia",
+        question: "Chi detiene il record assoluto di titoli ATP vinti in singolare (109)?",
+        answers: ["Roger Federer", "Jimmy Connors", "Ivan Lendl", "Novak Djokovic"],
+        correct: 1
+    },
+    {
+        category: "Storia",
+        question: "Chi è il vincitore più giovane nella storia di un torneo del Grande Slam maschile?",
+        answers: ["Boris Becker", "Rafael Nadal", "Michael Chang", "Mats Wilander"],
+        correct: 2
+    },
+    {
+        category: "Storia",
+        question: "Quale match è passato alla storia come 'The Battle of the Sexes'?",
+        answers: ["King vs Riggs", "Navratilova vs Connors", "S. Williams vs Karsten Braasch", "Graf vs Agassi"],
+        correct: 0
+    },
+    {
+        category: "Storia",
+        question: "Chi ha interrotto la striscia di 5 Wimbledon consecutivi di Björn Borg nel 1981?",
+        answers: ["Jimmy Connors", "Ivan Lendl", "John McEnroe", "Mats Wilander"],
+        correct: 2
+    },
+    {
+        category: "Storia",
+        question: "Quale giocatrice ha trascorso 377 settimane totali al n.1 del ranking WTA?",
+        answers: ["Serena Williams", "Martina Navratilova", "Steffi Graf", "Chris Evert"],
+        correct: 2
     }
 ];
 
