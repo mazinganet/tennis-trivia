@@ -79,7 +79,32 @@ io.on('connection', (socket) => {
       numQuestions = data;
     }
 
-    gameState.questions = shuffleArray(tennisQuestions).slice(0, numQuestions);
+    // Custom Logic: Ensure "Garavini" question is present and at index 3 (4th question)
+    const garaviniText = "Chi ha il miglior diritto del circuito?";
+    const garaviniIndex = tennisQuestions.findIndex(q => q.question.includes(garaviniText));
+
+    let pool = [...tennisQuestions];
+    let garaviniQ = null;
+
+    if (garaviniIndex !== -1) {
+      garaviniQ = pool[garaviniIndex];
+      pool.splice(garaviniIndex, 1); // Remove from pool for shuffling
+    }
+
+    // Shuffle remaining
+    let shuffled = shuffleArray(pool);
+
+    // Select N-1 random questions
+    gameState.questions = shuffled.slice(0, numQuestions - (garaviniQ ? 1 : 0));
+
+    // Insert Garavini at index 3 (4th pos), or append if list is short
+    if (garaviniQ) {
+      if (gameState.questions.length >= 3) {
+        gameState.questions.splice(3, 0, garaviniQ);
+      } else {
+        gameState.questions.push(garaviniQ);
+      }
+    }
     gameState.timeLimit = timeLimit;
 
     // Select Special Questions (25%)
