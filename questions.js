@@ -418,6 +418,68 @@ const tennisQuestions = [
         question: "Quale giocatrice ha trascorso 377 settimane totali al n.1 del ranking WTA?",
         answers: ["Serena Williams", "Martina Navratilova", "Steffi Graf", "Chris Evert"],
         correct: 2
+    },
+
+    // ==================== LIVELLO ESPERTO (DIFFICILI) ====================
+    {
+        category: "Storia",
+        question: "Chi ha vinto la prima edizione del Masters Grand Prix (oggi ATP Finals) nel 1970?",
+        answers: ["Stan Smith", "Rod Laver", "Arthur Ashe", "Ilie Nastase"],
+        correct: 0
+    },
+    {
+        category: "Record",
+        question: "Quanto è durata la partita più lunga della storia (Isner-Mahut, Wimbledon 2010)?",
+        answers: ["9 ore e 12 minuti", "10 ore e 5 minuti", "11 ore e 5 minuti", "8 ore e 45 minuti"],
+        correct: 2
+    },
+    {
+        category: "Regole",
+        question: "Qual è l'altezza esatta della rete al centro del campo?",
+        answers: ["0.900 metri", "0.914 metri", "1.000 metri", "0.850 metri"],
+        correct: 1
+    },
+    {
+        category: "Curiosità",
+        question: "Quale torneo del Grande Slam è stato giocato su tre superfici diverse (erba, terra verde, cemento)?",
+        answers: ["US Open", "Australian Open", "Roland Garros", "Wimbledon"],
+        correct: 0
+    },
+    {
+        category: "Record",
+        question: "Chi detiene il record di maggior numero di Ace in carriera (oltre 14.000)?",
+        answers: ["Ivo Karlovic", "John Isner", "Roger Federer", "Andy Roddick"],
+        correct: 1
+    },
+    {
+        category: "Storia",
+        question: "Chi è stato il più giovane vincitore di un torneo del Grande Slam (17 anni e 3 mesi)?",
+        answers: ["Boris Becker", "Mats Wilander", "Michael Chang", "Rafael Nadal"],
+        correct: 2
+    },
+    {
+        category: "Tecnica",
+        question: "Nel punteggio, da cosa deriva il termine 'Love' (zero)?",
+        answers: ["Dall'amore per il gioco", "Dal francese 'l'oeuf' (uovo)", "Da un errore di traduzione", "Dal cognome dell'inventore"],
+        correct: 1
+    },
+    {
+        category: "Regole",
+        question: "Qual è la dimensione esatta di un campo da singolare (lunghezza x larghezza)?",
+        answers: ["23.77 x 8.23 m", "24.00 x 9.00 m", "23.77 x 10.97 m", "22.50 x 8.00 m"],
+        correct: 0
+    },
+    {
+        category: "Record",
+        question: "Quale tennista ha vinto il 'Golden Slam' (4 Slam + Oro Olimpico) nello stesso anno (1988)?",
+        answers: ["Serena Williams", "Steffi Graf", "Martina Navratilova", "Andre Agassi"],
+        correct: 1
+    },
+    {
+        category: "Storia",
+        question: "Chi fu l'ultimo tennista a vincere Wimbledon usando una racchetta di legno (1975)?",
+        answers: ["Björn Borg", "Arthur Ashe", "Jimmy Connors", "John McEnroe"],
+        correct: 1
     }
 ];
 
