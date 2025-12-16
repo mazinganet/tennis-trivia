@@ -20,6 +20,12 @@ const tennisQuestions = [
         correct: 1
     },
     {
+        category: "Leggende",
+        question: "Chi ha il miglior diritto del circuito?",
+        answers: ["Marco Garavini", "Marco Zamagni", "Sacchini Roberto", "Ruggero Cantelli"],
+        correct: 0
+    },
+    {
         category: "Giocatori",
         question: "Chi è stato il primo tennista italiano a vincere un torneo Masters 1000?",
         answers: ["Jannik Sinner", "Matteo Berrettini", "Fabio Fognini", "Adriano Panatta"],
@@ -489,12 +495,7 @@ const tennisQuestions = [
         answers: ["Julien Boutter", "Hicham Arazi", "Greg Rusedski", "Yevgeny Kafelnikov"],
         correct: 0
     },
-    {
-        category: "Curiosità",
-        question: "Quante mucche servono (circa) per produrre il budello naturale per UNA sola racchetta?",
-        answers: ["1", "3", "5", "10"],
-        correct: 1
-    },
+
     {
         category: "Record",
         question: "Quale giocatore ha commesso 26 doppi falli in un match vincendolo comunque (Wimbledon 1995)?",
