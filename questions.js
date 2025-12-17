@@ -1,617 +1,102 @@
-// Database di domande sul Tennis
+// Database di domande sul Tennis (Livello: MOLTO DIFFICILE)
 const tennisQuestions = [
-    // ==================== GIOCATORI ====================
-    {
-        category: "Giocatori",
-        question: "Quanti titoli del Grande Slam ha vinto Roger Federer in carriera?",
-        answers: ["18", "20", "21", "17"],
-        correct: 1
-    },
-    {
-        category: "Giocatori",
-        question: "In quale anno Rafael Nadal ha vinto il suo primo Roland Garros?",
-        answers: ["2004", "2005", "2006", "2007"],
-        correct: 1
-    },
-    {
-        category: "Giocatori",
-        question: "Di quale paese è originario Novak Djokovic?",
-        answers: ["Croazia", "Serbia", "Bosnia", "Montenegro"],
-        correct: 1
-    },
-    {
-        category: "Leggende",
-        question: "Chi ha il miglior diritto del circuito?",
-        answers: ["Marco Garavini", "Marco Zamagni", "Sacchini Roberto", "Ruggero Cantelli"],
-        correct: 0
-    },
-    {
-        category: "Giocatori",
-        question: "Chi è stato il primo tennista italiano a vincere un torneo Masters 1000?",
-        answers: ["Jannik Sinner", "Matteo Berrettini", "Fabio Fognini", "Adriano Panatta"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Jannik Sinner ha vinto il suo primo Slam a quale torneo?",
-        answers: ["Wimbledon", "US Open", "Australian Open", "Roland Garros"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Chi detiene il record di settimane consecutive al numero 1 del ranking ATP?",
-        answers: ["Roger Federer", "Novak Djokovic", "Pete Sampras", "Jimmy Connors"],
-        correct: 0
-    },
-    {
-        category: "Giocatori",
-        question: "Quale tennista è soprannominato 'Il Re della Terra Rossa'?",
-        answers: ["Novak Djokovic", "Carlos Alcaraz", "Rafael Nadal", "Björn Borg"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Chi ha vinto il Golden Slam (4 Slam + Oro Olimpico) nel 1988?",
-        answers: ["Martina Navratilova", "Steffi Graf", "Chris Evert", "Monica Seles"],
-        correct: 1
-    },
-    {
-        category: "Giocatori",
-        question: "Quanti Roland Garros ha vinto Rafael Nadal?",
-        answers: ["12", "13", "14", "15"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Chi è il tennista più giovane ad aver raggiunto la posizione numero 1 del mondo?",
-        answers: ["Carlos Alcaraz", "Jannik Sinner", "Lleyton Hewitt", "Boris Becker"],
-        correct: 0
-    },
-    {
-        category: "Giocatori",
-        question: "Quale tennista ha vinto Wimbledon a soli 17 anni?",
-        answers: ["Pete Sampras", "Andre Agassi", "Boris Becker", "John McEnroe"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Chi ha vinto l'Australian Open 2024 maschile?",
-        answers: ["Novak Djokovic", "Daniil Medvedev", "Jannik Sinner", "Carlos Alcaraz"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Quale tennista italiano ha raggiunto la finale di Wimbledon 2021?",
-        answers: ["Jannik Sinner", "Matteo Berrettini", "Lorenzo Sonego", "Fabio Fognini"],
-        correct: 1
-    },
-    {
-        category: "Giocatori",
-        question: "Chi è stato il primo tennista a vincere il Career Golden Slam maschile?",
-        answers: ["Roger Federer", "Rafael Nadal", "Andre Agassi", "Novak Djokovic"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Quanti Slam ha vinto Serena Williams?",
-        answers: ["21", "22", "23", "24"],
-        correct: 2
-    },
-    {
-        category: "Giocatori",
-        question: "Chi è il tennista con più vittorie in carriera sull'erba?",
-        answers: ["Pete Sampras", "Roger Federer", "Boris Becker", "John McEnroe"],
-        correct: 1
-    },
-    {
-        category: "Giocatori",
-        question: "Quale ex numero 1 del mondo è anche DJ professionista?",
-        answers: ["Andy Roddick", "Marat Safin", "Lleyton Hewitt", "Gustavo Kuerten"],
-        correct: 1
-    },
-    {
-        category: "Giocatori",
-        question: "Chi ha battuto Federer nella storica finale di Wimbledon 2008?",
-        answers: ["Novak Djokovic", "Andy Murray", "Rafael Nadal", "Andy Roddick"],
-        correct: 2
-    },
-
-    // ==================== TECNICA ====================
+    // ==================== TECNICA AVANZATA ====================
     {
         category: "Tecnica",
-        question: "Come si chiama il colpo eseguito al volo vicino alla rete?",
-        answers: ["Smash", "Volée", "Lob", "Drop shot"],
-        correct: 1
-    },
-    {
-        category: "Tecnica",
-        question: "Qual è il nome del colpo che passa sopra la testa dell'avversario a rete?",
-        answers: ["Lob", "Smash", "Passing shot", "Slice"],
+        question: "Cosa misura esattamente il 'Swingweight' di una racchetta?",
+        answers: ["La resistenza alla rotazione attorno a un asse a 10cm dal tappo (inerzia)", "Il peso statico della racchetta incordata", "Il bilanciamento verso la testa", "La rigidità torsionale del telaio"],
         correct: 0
     },
     {
         category: "Tecnica",
-        question: "Come si chiama l'effetto che fa rimbalzare la palla bassa e veloce?",
-        answers: ["Topspin", "Slice", "Flat", "Kick"],
+        question: "Qual è l'angolo approssimativo di flessione del ginocchio nella 'Trophy Position' ideale per massimizzare la spinta?",
+        answers: ["90 gradi", "110-120 gradi", "135-145 gradi", "160 gradi"],
         correct: 1
     },
     {
         category: "Tecnica",
-        question: "Quale impugnatura è più usata per il servizio moderno?",
-        answers: ["Eastern", "Western", "Continental", "Semi-Western"],
-        correct: 2
+        question: "Nel dritto in Topspin, quanti RPM (giri al minuto) medi generava il dritto di Rafael Nadal al Roland Garros nelle annate migliori?",
+        answers: ["Circa 2500 RPM", "Circa 3200 RPM", "Oltre 5000 RPM", "Circa 1800 RPM"],
+        correct: 1
     },
     {
         category: "Tecnica",
-        question: "Come si chiama il colpo smorzato che cade vicino alla rete?",
-        answers: ["Lob", "Slice", "Drop shot", "Passing shot"],
-        correct: 2
-    },
-    {
-        category: "Tecnica",
-        question: "Qual è l'effetto che fa rimbalzare la palla alta con rotazione in avanti?",
-        answers: ["Slice", "Flat", "Topspin", "Backspin"],
-        correct: 2
-    },
-    {
-        category: "Tecnica",
-        question: "Come si chiama il rovescio eseguito con una sola mano?",
-        answers: ["One-handed backhand", "Two-handed backhand", "Half volley", "Slice backhand"],
+        question: "Cosa si intende in biomeccanica tennistica con il termine 'Stretch-Shortening Cycle' (SSC)?",
+        answers: ["Il pre-stiramento muscolare che aumenta la forza di contrazione durante il colpo", "Il ciclo di respirazione durante gli scambi lunghi", "La routine di stretching post-partita", "L'accorciamento del movimento in risposta a palle veloci"],
         correct: 0
     },
     {
         category: "Tecnica",
-        question: "Qual è il nome del colpo che passa l'avversario a rete lungo la linea o in diagonale?",
-        answers: ["Drop shot", "Lob", "Passing shot", "Winner"],
+        question: "Quale impugnatura prevede che la 'base knuckle' dell'indice sia posizionata sul lato (bevel) numero 5 del manico (per un destro)?",
+        answers: ["Eastern Forehand", "Semi-Western", "Western", "Continental"],
         correct: 2
     },
     {
         category: "Tecnica",
-        question: "Come si chiama il colpo potente eseguito sopra la testa?",
-        answers: ["Volée", "Smash", "Lob", "Slice"],
-        correct: 1
+        question: "Se aumenti la tensione delle corde di 2 kg mantenendo uguale la racchetta, cosa succede fisicamente al tempo di permanenza (dwell time) della palla sulle corde?",
+        answers: ["Diminuisce", "Aumenta", "Rimane invariato", "Dipende solo dalla temperatura"],
+        correct: 0
     },
     {
         category: "Tecnica",
-        question: "Quale tipo di servizio ha più effetto kick?",
-        answers: ["Servizio piatto", "Servizio slice", "Servizio kick", "Servizio a cucchiaio"],
-        correct: 2
+        question: "Quale legge fisica spiega perché una pallina in topspin 'cade' più velocemente nel campo avversario?",
+        answers: ["Effetto Magnus", "Effetto Doppler", "Principio di Bernoulli", "Legge di Newton"],
+        correct: 0
     },
     {
         category: "Tecnica",
-        question: "Come si chiama il colpo giocato subito dopo il rimbalzo della palla?",
-        answers: ["Volée", "Half volley", "Drop shot", "Approach shot"],
-        correct: 1
-    },
-    {
-        category: "Tecnica",
-        question: "Qual è la zona del campo chiamata 'terra di nessuno'?",
-        answers: ["Dietro la linea di fondo", "Vicino alla rete", "Tra la linea di fondo e la rete", "I corridoi laterali"],
-        correct: 2
-    },
-    {
-        category: "Tecnica",
-        question: "Cosa significa 'ace' nel tennis?",
-        answers: ["Punto diretto di servizio", "Doppio fallo", "Palla break", "Volée vincente"],
+        question: "Nella catena cinetica del servizio, quale parte del corpo dovrebbe teoricamente frenare per trasferire velocità al segmento successivo (braccio/racchetta)?",
+        answers: ["Il tronco/spalla", "Il polso", "I piedi", "La testa"],
         correct: 0
     },
 
+    // ==================== RISULTATI STORICI E RECORD (HARD) ====================
     {
-        category: "Tecnica",
-        question: "Cosa si intende per 'Pronazione' nel servizio?",
-        answers: ["Flessione del polso", "Rotazione dell'avambraccio", "Estensione del gomito", "Caricamento delle gambe"],
+        category: "Risultati",
+        question: "Quale fu il punteggio esatto del leggendario tie-break del quarto set nella finale di Wimbledon 1980 tra Borg e McEnroe?",
+        answers: ["16-14", "18-16", "20-18", "15-13"],
         correct: 1
     },
     {
-        category: "Tecnica",
-        question: "Qual è lo scopo principale dello 'Split Step'?",
-        answers: ["Generare potenza", "Ingannare l'avversario", "Attivare la reattività", "Recuperare posizione"],
-        correct: 2
+        category: "Risultati",
+        question: "Chi detiene il record per il match di singolare femminile più breve della storia dell'Era Open (Finale Roland Garros 1988)?",
+        answers: ["Graf b. Zvereva (32 minuti)", "Navratilova b. Evert (40 minuti)", "S. Williams b. Sharapova (45 minuti)", "Hingis b. Pierce (38 minuti)"],
+        correct: 0
     },
     {
-        category: "Tecnica",
-        question: "Nel dritto moderno, il movimento 'tergicristallo' serve principalmente a:",
-        answers: ["Aumentare la potenza piatta", "Generare Topspin estremo", "Creare un effetto Slice", "Smorzare la palla"],
+        category: "Risultati",
+        question: "In quale anno è stato introdotto per la prima volta il tie-break a Wimbledon?",
+        answers: ["1971", "1968", "1973", "1979"],
+        correct: 0
+    },
+    {
+        category: "Risultati",
+        question: "Quale giocatore ha vinto il titolo di singolare maschile alle Olimpiadi di Parigi 1924?",
+        answers: ["Vincent Richards", "René Lacoste", "Jean Borotra", "Bill Tilden"],
+        correct: 0
+    },
+    {
+        category: "Risultati",
+        question: "Chi è l'unico giocatore ad aver vinto due volte il 'Calendar Grand Slam' (tutti e 4 gli Slam nello stesso anno) nel singolare maschile?",
+        answers: ["Rod Laver", "Don Budge", "Roger Federer", "Novak Djokovic"],
+        correct: 0
+    },
+    {
+        category: "Risultati",
+        question: "Quale fu il punteggio del set finale (5°) nel match più lungo della storia (Isner-Mahut 2010)?",
+        answers: ["68-66", "70-68", "72-70", "64-62"],
         correct: 1
     },
     {
-        category: "Tecnica",
-        question: "Quale fase del colpo segue immediatamente l'impatto con la palla?",
-        answers: ["Backswing", "Split Step", "Follow-through", "Ready position"],
-        correct: 2
-    },
-    {
-        category: "Tecnica",
-        question: "Come viene definita la zona di impatto ideale rispetto al corpo?",
-        answers: ["Dietro al corpo", "A fianco del corpo", "Davanti al corpo", "Sopra la testa"],
-        correct: 2
-    },
-
-    // ==================== TORNEI ====================
-    {
-        category: "Tornei",
-        question: "Su quale superficie si gioca Wimbledon?",
-        answers: ["Terra rossa", "Cemento", "Erba", "Sintetico"],
-        correct: 2
-    },
-    {
-        category: "Tornei",
-        question: "In quale città si gioca il Roland Garros?",
-        answers: ["Londra", "New York", "Melbourne", "Parigi"],
-        correct: 3
-    },
-    {
-        category: "Tornei",
-        question: "Quanti tornei del Grande Slam ci sono in una stagione?",
-        answers: ["3", "4", "5", "6"],
-        correct: 1
-    },
-    {
-        category: "Tornei",
-        question: "Su quale superficie si gioca l'Australian Open?",
-        answers: ["Erba", "Terra rossa", "Cemento", "Sintetico indoor"],
-        correct: 2
-    },
-    {
-        category: "Tornei",
-        question: "Quale Slam si gioca per ultimo nell'anno?",
-        answers: ["Australian Open", "Roland Garros", "Wimbledon", "US Open"],
-        correct: 3
-    },
-    {
-        category: "Tornei",
-        question: "Dove si tengono le ATP Finals?",
-        answers: ["Londra", "Torino", "New York", "Dubai"],
-        correct: 1
-    },
-    {
-        category: "Tornei",
-        question: "Qual è il torneo più antico del mondo?",
-        answers: ["US Open", "Roland Garros", "Wimbledon", "Australian Open"],
-        correct: 2
-    },
-    {
-        category: "Tornei",
-        question: "In quale mese si gioca il Roland Garros?",
-        answers: ["Gennaio", "Maggio-Giugno", "Luglio", "Settembre"],
-        correct: 1
-    },
-    {
-        category: "Tornei",
-        question: "Quale torneo italiano fa parte dei Masters 1000?",
-        answers: ["Roma", "Milano", "Torino", "Bologna"],
+        category: "Risultati",
+        question: "Chi ha sconfitto Rafael Nadal per la prima volta in assoluto al Roland Garros (2009)?",
+        answers: ["Robin Söderling", "Novak Djokovic", "Roger Federer", "Stan Wawrinka"],
         correct: 0
     },
     {
-        category: "Tornei",
-        question: "Quale Slam utilizza il tie-break nel set decisivo?",
-        answers: ["Wimbledon", "Roland Garros", "US Open", "Australian Open"],
-        correct: 2
-    },
-
-    // ==================== REGOLE ====================
-    {
-        category: "Regole",
-        question: "Quanti set bisogna vincere per aggiudicarsi un match di Slam maschile?",
-        answers: ["2", "3", "4", "5"],
-        correct: 1
-    },
-    {
-        category: "Regole",
-        question: "A che punteggio si gioca il tie-break?",
-        answers: ["5-5", "6-6", "7-7", "4-4"],
-        correct: 1
-    },
-    {
-        category: "Regole",
-        question: "Quanti falli di servizio consecutivi causano la perdita del punto?",
-        answers: ["1", "2", "3", "4"],
-        correct: 1
-    },
-    {
-        category: "Regole",
-        question: "Come si chiama il punteggio 40-40?",
-        answers: ["Parità", "Deuce", "Vantaggio", "Love"],
-        correct: 1
-    },
-    {
-        category: "Regole",
-        question: "Cosa significa 'Love' nel punteggio del tennis?",
-        answers: ["15", "30", "Zero", "Vantaggio"],
-        correct: 2
-    },
-    {
-        category: "Regole",
-        question: "Quanti punti servono per vincere un game (partendo da 0-0)?",
-        answers: ["3", "4", "5", "6"],
-        correct: 1
-    },
-    {
-        category: "Regole",
-        question: "Cosa succede se la palla tocca la rete durante il servizio e finisce nella casella corretta?",
-        answers: ["Punto per chi riceve", "Doppio fallo", "Let, si ripete", "Ace"],
-        correct: 2
-    },
-    {
-        category: "Regole",
-        question: "Quanti game bisogna vincere per aggiudicarsi un set (con 2 game di vantaggio)?",
-        answers: ["4", "5", "6", "7"],
-        correct: 2
-    },
-    {
-        category: "Regole",
-        question: "Quanto tempo ha il giocatore tra un punto e l'altro per servire?",
-        answers: ["15 secondi", "20 secondi", "25 secondi", "30 secondi"],
-        correct: 2
-    },
-    {
-        category: "Regole",
-        question: "Il tie-break viene vinto da chi arriva primo a quanti punti (con 2 di vantaggio)?",
-        answers: ["5", "6", "7", "10"],
-        correct: 2
-    },
-
-    // ==================== STORIA ====================
-    {
-        category: "Storia",
-        question: "In che anno è stato fondato il torneo di Wimbledon?",
-        answers: ["1877", "1881", "1900", "1920"],
-        correct: 0
-    },
-    {
-        category: "Storia",
-        question: "Chi è considerato il padre del tennis moderno in Italia?",
-        answers: ["Nicola Pietrangeli", "Adriano Panatta", "Corrado Barazzutti", "Paolo Bertolucci"],
-        correct: 0
-    },
-    {
-        category: "Storia",
-        question: "In che anno l'Italia ha vinto la sua prima Coppa Davis?",
-        answers: ["1970", "1972", "1976", "1980"],
-        correct: 2
-    },
-    {
-        category: "Storia",
-        question: "Chi ha vinto il primo US Open dell'Era Open nel 1968?",
-        answers: ["Rod Laver", "Arthur Ashe", "Ken Rosewall", "John Newcombe"],
-        correct: 1
-    },
-    {
-        category: "Storia",
-        question: "Quale tennista ha completato il Grande Slam due volte in carriera?",
-        answers: ["Björn Borg", "Rod Laver", "Pete Sampras", "Roger Federer"],
-        correct: 1
-    },
-    {
-        category: "Storia",
-        question: "Quando è iniziata l'Era Open del tennis?",
-        answers: ["1960", "1968", "1975", "1980"],
-        correct: 1
-    },
-    // ==================== RECORD E LEGGENDE ====================
-    {
-        category: "Storia",
-        question: "Chi è l'unico tennista ad aver completato il Grande Slam (tutti e 4 nello stesso anno) per due volte?",
-        answers: ["Roger Federer", "Rod Laver", "Novak Djokovic", "Don Budge"],
-        correct: 1
-    },
-    {
-        category: "Storia",
-        question: "Chi detiene il record assoluto di titoli ATP vinti in singolare (109)?",
-        answers: ["Roger Federer", "Jimmy Connors", "Ivan Lendl", "Novak Djokovic"],
-        correct: 1
-    },
-    {
-        category: "Storia",
-        question: "Chi è il vincitore più giovane nella storia di un torneo del Grande Slam maschile?",
-        answers: ["Boris Becker", "Rafael Nadal", "Michael Chang", "Mats Wilander"],
-        correct: 2
-    },
-    {
-        category: "Storia",
-        question: "Quale match è passato alla storia come 'The Battle of the Sexes'?",
-        answers: ["King vs Riggs", "Navratilova vs Connors", "S. Williams vs Karsten Braasch", "Graf vs Agassi"],
-        correct: 0
-    },
-    {
-        category: "Storia",
-        question: "Chi ha interrotto la striscia di 5 Wimbledon consecutivi di Björn Borg nel 1981?",
-        answers: ["Jimmy Connors", "Ivan Lendl", "John McEnroe", "Mats Wilander"],
-        correct: 2
-    },
-    {
-        category: "Storia",
-        question: "Quale giocatrice ha trascorso 377 settimane totali al n.1 del ranking WTA?",
-        answers: ["Serena Williams", "Martina Navratilova", "Steffi Graf", "Chris Evert"],
-        correct: 2
-    },
-
-    // ==================== LIVELLO ESPERTO (DIFFICILI) ====================
-    {
-        category: "Storia",
-        question: "Chi ha vinto la prima edizione del Masters Grand Prix (oggi ATP Finals) nel 1970?",
-        answers: ["Stan Smith", "Rod Laver", "Arthur Ashe", "Ilie Nastase"],
-        correct: 0
-    },
-    {
-        category: "Record",
-        question: "Quanto è durata la partita più lunga della storia (Isner-Mahut, Wimbledon 2010)?",
-        answers: ["9 ore e 12 minuti", "10 ore e 5 minuti", "11 ore e 5 minuti", "8 ore e 45 minuti"],
-        correct: 2
-    },
-    {
-        category: "Regole",
-        question: "Qual è l'altezza esatta della rete al centro del campo?",
-        answers: ["0.900 metri", "0.914 metri", "1.000 metri", "0.850 metri"],
-        correct: 1
-    },
-    {
-        category: "Curiosità",
-        question: "Quale torneo del Grande Slam è stato giocato su tre superfici diverse (erba, terra verde, cemento)?",
-        answers: ["US Open", "Australian Open", "Roland Garros", "Wimbledon"],
-        correct: 0
-    },
-    {
-        category: "Record",
-        question: "Chi detiene il record di maggior numero di Ace in carriera (oltre 14.000)?",
-        answers: ["Ivo Karlovic", "John Isner", "Roger Federer", "Andy Roddick"],
-        correct: 1
-    },
-    {
-        category: "Storia",
-        question: "Chi è stato il più giovane vincitore di un torneo del Grande Slam (17 anni e 3 mesi)?",
-        answers: ["Boris Becker", "Mats Wilander", "Michael Chang", "Rafael Nadal"],
-        correct: 2
-    },
-    {
-        category: "Tecnica",
-        question: "Nel punteggio, da cosa deriva il termine 'Love' (zero)?",
-        answers: ["Dall'amore per il gioco", "Dal francese 'l'oeuf' (uovo)", "Da un errore di traduzione", "Dal cognome dell'inventore"],
-        correct: 1
-    },
-    {
-        category: "Regole",
-        question: "Qual è la dimensione esatta di un campo da singolare (lunghezza x larghezza)?",
-        answers: ["23.77 x 8.23 m", "24.00 x 9.00 m", "23.77 x 10.97 m", "22.50 x 8.00 m"],
-        correct: 0
-    },
-    {
-        category: "Record",
-        question: "Quale tennista ha vinto il 'Golden Slam' (4 Slam + Oro Olimpico) nello stesso anno (1988)?",
-        answers: ["Serena Williams", "Steffi Graf", "Martina Navratilova", "Andre Agassi"],
-        correct: 1
-    },
-    {
-        category: "Storia",
-        question: "Chi fu l'ultimo tennista a vincere Wimbledon usando una racchetta di legno (1975)?",
-        answers: ["Björn Borg", "Arthur Ashe", "Jimmy Connors", "John McEnroe"],
-        correct: 1
-    },
-
-    // ==================== LIVELLO IMPOSSIBILE (NERD) ====================
-    {
-        category: "Storia",
-        question: "Chi perse la finale contro Roger Federer al suo PRIMO titolo ATP (Milano 2001)?",
-        answers: ["Julien Boutter", "Hicham Arazi", "Greg Rusedski", "Yevgeny Kafelnikov"],
-        correct: 0
-    },
-
-    {
-        category: "Record",
-        question: "Quale giocatore ha commesso 26 doppi falli in un match vincendolo comunque (Wimbledon 1995)?",
-        answers: ["Goran Ivanisevic", "Marc Rosset", "Richard Krajicek", "Todd Martin"],
-        correct: 1
-    },
-    {
-        category: "Regole",
-        question: "Qual è il peso minimo regolamentare di una pallina da tennis (Tipo 2)?",
-        answers: ["56.0 grammi", "57.7 grammi", "58.5 grammi", "55.5 grammi"],
-        correct: 0
-    },
-    {
-        category: "Leggende",
-        question: "Chi è l'unico giocatore nella storia ad aver vinto Wimbledon partecipando come Wild Card?",
-        answers: ["Goran Ivanisevic", "Boris Becker", "Andre Agassi", "Lleyton Hewitt"],
-        correct: 0
-    },
-    {
-        category: "Storia",
-        question: "Chi ha vinto l'oro olimpico in singolare maschile a Parigi 1924 (l'ultimo prima del 1988)?",
-        answers: ["Vincent Richards", "René Lacoste", "Bill Tilden", "Henri Cochet"],
-        correct: 0
-    },
-    {
-        category: "Punteggio",
-        question: "Come finì il famoso tie-break del 4° set tra Borg e McEnroe a Wimbledon 1980?",
-        answers: ["18-16 per McEnroe", "20-18 per Borg", "16-14 per McEnroe", "15-13 per Borg"],
-        correct: 0
-    },
-    {
-        category: "Attrezzatura",
-        question: "Quale azienda ha inventato la racchetta in metallo (modello T2000 usata da Connors)?",
-        answers: ["Wilson", "Prince", "Dunlop", "Head"],
-        correct: 0
-    },
-
-    // ==================== APPROFONDIMENTO TECNICA (STANCE & MOVIMENTO) ====================
-    {
-        category: "Tecnica",
-        question: "Nella 'Open Stance' (posizione aperta), come sono posizionati i piedi rispetto alla rete?",
-        answers: ["Paralleli alla rete", "Perpendicolari alla rete", "Uno avanti e uno indietro", "Incrociati"],
-        correct: 0
-    },
-    {
-        category: "Tecnica",
-        question: "In quale situazione tattica è preferibile utilizzare la 'Neutral Stance' (piedi di fianco)?",
-        answers: ["Quando si avanza verso la rete per attaccare", "Quando si è in difesa estrema laterale", "Per rispondere a un servizio veloce", "Nello scambio da fondo campo veloce"],
-        correct: 0
-    },
-    {
-        category: "Tecnica",
-        question: "Cosa si intende per 'Dritto a sventaglio' (Inside-out Forehand)?",
-        answers: ["Colpire di dritto dall'angolo del rovescio verso l'angolo opposto", "Colpire di dritto in lungolinea", "Colpire un dritto con rotazione slice", "Colpire il dritto saltando"],
-        correct: 0
-    },
-    {
-        category: "Tecnica",
-        question: "Cos'è la 'Catena Cinetica' nel tennis?",
-        answers: ["Il trasferimento di energia sequenziale (piedi-gambe-busto-braccio)", "La sequenza di partite in un torneo", "Il movimento del polso al contatto", "La rotazione della palla in aria"],
-        correct: 0
-    },
-    {
-        category: "Tecnica",
-        question: "Quale impugnatura (Grip) favorisce il massimo Topspin ma rende difficili le palle basse?",
-        answers: ["Western", "Eastern", "Continental", "Semi-Western"],
-        correct: 0
-    },
-    {
-        category: "Tecnica",
-        question: "A quale fase del servizio si riferisce il termine 'Trophy Position'?",
-        answers: ["Al caricamento (ginocchia piegate, racchetta alta)", "All'impatto con la palla", "Al lancio di palla", "All'atterraggio dopo il salto"],
-        correct: 0
-    },
-    {
-        category: "Tecnica",
-        question: "Quale passo si utilizza per recuperare velocemente il centro del campo dopo un colpo laterale?",
-        answers: ["Passo incrociato (Crossover step)", "Passo laterale (Side shuffle)", "Corsa all'indietro", "Salto a piedi pari"],
-        correct: 0
-    },
-
-    // ==================== LEGGENDE DEL CLUB (CUSTOM) ====================
-    {
-        category: "Leggende",
-        question: "Quale Giocatore ha la miglior smorzata del circuito ATP?",
-        answers: ["Ruggero Cantelli", "Marco Storoni", "Fabiano Urbinati", "Renzi Roberto"],
-        correct: 0
-    },
-    {
-        category: "Leggende",
-        question: "Quale giocatore ha il miglior rovescio a una mano?",
-        answers: ["Tognacci Max", "Spada Francesco", "Storoni Marco", "Piuma Marco"],
-        correct: 3
-    },
-    {
-        category: "Leggende",
-        question: "Quale giocatore ha il miglior rovescio a una mano del circuito ATP?",
-        answers: ["Tognacci Max", "Spada Francesco", "Storoni Marco", "Piuma Marco"],
-        correct: 3
-    },
-    {
-        category: "Leggende",
-        question: "Quale giocatore/trice ha il miglior rovescio a 2 mani del circuito ATP/WTA?",
-        answers: ["Lazzarini Aldo", "Razzani Erika", "Jessica Barbieri", "Alice Belli"],
-        correct: 2
-    },
-    {
-        category: "Leggende",
-        question: "Quale giocatore ha la miglior volèe del circuito ATP?",
-        answers: ["Piccolo Luigi", "Venditti Adolfo", "Rinaldi Roberto", "Mario Russo"],
-        correct: 3
-    },
-    {
-        category: "Leggende",
-        question: "Quale giocatore ha vinto più volte il riconoscimento per il fair play?",
-        answers: ["Roberto Sacchini", "Roger Federer", "Jannik Sinner", "Carlos Alcaraz"],
+        category: "Risultati",
+        question: "Quante settimane consecutive Roger Federer ha trascorso al n. 1 del ranking ATP (Record)?",
+        answers: ["237", "200", "286", "160"],
         correct: 0
     }
 ];

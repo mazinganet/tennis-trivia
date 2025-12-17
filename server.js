@@ -79,63 +79,11 @@ io.on('connection', (socket) => {
       numQuestions = data;
     }
 
-    // Custom Logic: Ensure "Garavini" question is present and at index 3 (4th question)
-    // Custom Logic: Prioritize "Leggende" and Force Garavini at #4
+    // Standard Logic: Shuffle and Pick Random Questions
+    const shuffled = shuffleArray(tennisQuestions);
+    const selectedQuestions = shuffled.slice(0, numQuestions);
 
-    // 1. Identify Garavini
-    const garaviniText = "Chi ha il miglior diritto del circuito?";
-    const garaviniIndex = tennisQuestions.findIndex(q => q.question.includes(garaviniText));
-    let garaviniQ = null;
-
-    // 2. Identify all other "Leggende" questions
-    let legendsParams = [];
-    let otherQuestions = [];
-
-    tennisQuestions.forEach((q, index) => {
-      if (index === garaviniIndex) {
-        garaviniQ = q;
-      } else if (q.category === "Leggende") {
-        legendsParams.push(q);
-      } else {
-        otherQuestions.push(q);
-      }
-    });
-
-    // 3. Prepare the pool for this game
-    // We need 'numQuestions' total. 
-    // Garavini takes 1 spot.
-    // Legends take N spots.
-    // The rest are random.
-
-    let availableSlots = numQuestions;
-    if (garaviniQ) availableSlots--;
-
-    // Shuffle legends to vary their order lightly (though we use all of them usually)
-    let shuffledLegends = shuffleArray(legendsParams);
-
-    // Take as many legends as fit (usually all)
-    let selectedLegends = shuffledLegends.slice(0, availableSlots);
-    availableSlots -= selectedLegends.length;
-
-    // Fill rest with random other questions
-    let shuffledOthers = shuffleArray(otherQuestions);
-    let selectedOthers = shuffledOthers.slice(0, availableSlots);
-
-    // Combine Legends + Others and shuffle them together so legends aren't all at the start
-    let gamePool = shuffleArray([...selectedLegends, ...selectedOthers]);
-
-    // 4. Insert Garavini at specific position (index 3 -> 4th question)
-    if (garaviniQ) {
-      // If we have enough questions to put it at #4, do so. 
-      // Otherwise append.
-      if (gamePool.length >= 3) {
-        gamePool.splice(3, 0, garaviniQ);
-      } else {
-        gamePool.push(garaviniQ);
-      }
-    }
-
-    gameState.questions = gamePool;
+    gameState.questions = selectedQuestions;
     gameState.timeLimit = timeLimit;
 
     // Select Special Questions (25%)
