@@ -221,10 +221,10 @@
                 badge.classList.remove('special');
             }
 
-            nextBtn.innerHTML = '<span>Mostra Risultati</span>';
-            // Hide next button during question (auto-show results will trigger it back, or manual override)
-            // User did not ask to hide it, but logic says wait for timer. 
-            // However, presenter might want to skip wait. Keeping it visible.
+            nextBtn.innerHTML = '<span>Attendi...</span>';
+            nextBtn.disabled = true;
+            nextBtn.style.opacity = '0.5';
+            nextBtn.style.cursor = 'not-allowed';
 
             resetProgress();
 
