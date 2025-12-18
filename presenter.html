@@ -49,6 +49,14 @@
                             <option value="30">30s</option>
                         </select>
                     </div>
+
+                    <div class="config-item">
+                        <label for="db-select">Database:</label>
+                        <select id="db-select">
+                            <option value="original" selected>Originale (100+)</option>
+                            <option value="new">Nuovo (Personalizzato)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <button id="start-game" class="btn-primary">
@@ -149,7 +157,8 @@
         document.getElementById('start-game').addEventListener('click', () => {
             const num = parseInt(document.getElementById('num-questions').value);
             const time = parseInt(document.getElementById('time-limit').value);
-            socket.emit('presenter:startGame', { num, time });
+            const db = document.getElementById('db-select').value;
+            socket.emit('presenter:startGame', { num, time, db });
         });
 
         // Terminate Button Logic

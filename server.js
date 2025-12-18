@@ -5,7 +5,9 @@ const path = require('path');
 const os = require('os');
 
 // Load questions module
-const tennisQuestions = require('./questions.js');
+// Load questions modules
+const questionsOriginal = require('./questions_original.js');
+const questionsNew = require('./questions_new.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -79,8 +81,11 @@ io.on('connection', (socket) => {
       numQuestions = data;
     }
 
+    // Select Database
+    const sourceQuestions = data.db === 'new' ? questionsNew : questionsOriginal;
+
     // Standard Logic: Shuffle and Pick Random Questions
-    const shuffled = shuffleArray(tennisQuestions);
+    const shuffled = shuffleArray(sourceQuestions);
     const selectedQuestions = shuffled.slice(0, numQuestions);
 
     gameState.questions = selectedQuestions;
