@@ -155,6 +155,10 @@
 
         // Listeners
         document.getElementById('start-game').addEventListener('click', () => {
+            if (teams.length === 0) {
+                alert('Attenzione: Nessuna squadra connessa! Attendi che almeno una squadra si colleghi prima di iniziare.');
+                return;
+            }
             const num = parseInt(document.getElementById('num-questions').value);
             const time = parseInt(document.getElementById('time-limit').value);
             const db = document.getElementById('db-select').value;
