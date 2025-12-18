@@ -50,7 +50,11 @@
     <!-- Game Screen -->
     <div id="game-screen" class="screen">
         <div class="game-header">
+            <div id="special-badge"
+                style="display: none; color:#ffd700; font-weight:800; font-size:1.2rem; margin-bottom:0.5rem;">★ DOMANDA
+                SPECIALE X2 ★</div>
             <span class="question-counter">Domanda <span id="q-num">1</span>/<span id="q-total">15</span></span>
+            <div id="player-timer" class="player-timer">15</div>
         </div>
 
         <div class="buzzer-area">
@@ -80,6 +84,11 @@
             <h2 id="result-message"></h2>
             <p id="result-correct-text" class="result-correct-text"></p>
             <div class="current-score">Punti: <span id="score-display">0</span></div>
+
+            <div class="mini-leaderboard">
+                <h3>Classifica</h3>
+                <div id="result-leaderboard" class="leaderboard-list"></div>
+            </div>
         </div>
     </div>
 
@@ -99,8 +108,12 @@
         <div class="gameover-container">
             <div class="trophy-small">🏁</div>
             <h1>Partita Terminata!</h1>
-            <p>Guarda lo schermo principale per la classifica finale</p>
-            <button id="rejoin-btn" class="btn-primary">Nuova Partita</button>
+
+            <div class="final-leaderboard">
+                <div id="final-leaderboard-list" class="leaderboard-list"></div>
+            </div>
+
+            <button id="rejoin-btn" class="btn-primary" style="margin-top: 1.5rem;">Nuova Partita</button>
         </div>
     </div>
 
@@ -112,6 +125,7 @@
         let myTeam = null;
         let canAnswer = false;
         let selectedAnswerIndex = null;
+        let playerTimerInterval = null;
 
         // Elements
         const screens = {
@@ -202,14 +216,20 @@
             document.getElementById('q-num').textContent = q.index;
             document.getElementById('q-total').textContent = q.total;
 
+            const specialBadge = document.getElementById('special-badge');
             const header = document.querySelector('.game-header');
+
             if (q.isSpecial) {
                 header.classList.add('special');
-                header.innerHTML = `<div style="color:#ffd700; font-weight:800; font-size:1.2rem; margin-bottom:0.5rem;">★ DOMANDA SPECIALE X2 ★</div>` +
-                    `<span class="question-counter">Domanda <span id="q-num">${q.index}</span>/<span id="q-total">${q.total}</span></span>`;
+                specialBadge.style.display = 'block';
             } else {
                 header.classList.remove('special');
-                header.innerHTML = `<span class="question-counter">Domanda <span id="q-num">${q.index}</span>/<span id="q-total">${q.total}</span></span>`;
+                specialBadge.style.display = 'none';
+            }
+
+            // Sync timer if present (for logic or reconnection)
+            if (q.timeLeft !== undefined) {
+                startPlayerTimer(q.timeLeft);
             }
 
             // Update Question Text
@@ -228,13 +248,65 @@
             hideFeedback();
         });
 
-        socket.on('player:answerReceived', () => {
-            showFeedback('Risposta Inviata! Attendi...', 'waiting');
+        socket.on('game:timer', ({ timeLeft }) => {
+            startPlayerTimer(timeLeft);
         });
 
-        socket.on('game:result', ({ correctAnswer, correctAnswerText }) => {
-            // Wait for individual feedback
+        function startPlayerTimer(seconds) {
+            if (playerTimerInterval) clearInterval(playerTimerInterval);
+
+            const timerDisplay = document.getElementById('player-timer');
+            if (!timerDisplay) return;
+
+            let timeLeft = seconds;
+            timerDisplay.textContent = timeLeft;
+            timerDisplay.classList.remove('urgent');
+
+            playerTimerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft >= 0) {
+                    timerDisplay.textContent = timeLeft;
+                    if (timeLeft <= 5) {
+                        timerDisplay.classList.add('urgent');
+                    }
+                } else {
+                    clearInterval(playerTimerInterval);
+                }
+            }, 1000);
+        }
+
+        socket.on('player:answerReceived', () => {
+            showFeedback('Risposta Inviata! Attendi...', 'waiting');
+            stopPlayerTimer();
         });
+
+        socket.on('game:result', ({ correctAnswer, correctAnswerText, teams }) => {
+            // Wait for individual feedback
+            stopPlayerTimer();
+            if (teams) {
+                updateLeaderboard(teams, 'result-leaderboard');
+            }
+        });
+
+        function updateLeaderboard(teams, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = '';
+            teams.forEach((team, index) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                if (myTeam && team.id === myTeam.id) item.classList.add('me');
+
+                item.innerHTML = `
+                    <span class="rank">${index + 1}</span>
+                    <span class="team-color-dot" style="background: ${team.color}"></span>
+                    <span class="team-name">${team.name}</span>
+                    <span class="team-score">${team.score}</span>
+                `;
+                container.appendChild(item);
+            });
+        }
 
         socket.on('player:feedback', ({ correct, score }) => {
             const icon = document.getElementById('result-icon-player');
@@ -257,6 +329,7 @@
         });
 
         socket.on('game:over', ({ teams }) => {
+            updateLeaderboard(teams, 'final-leaderboard-list');
             // Find highest score
             if (teams && teams.length > 0) {
                 const maxScore = teams[0].score;
@@ -342,6 +415,13 @@
 
         function hideFeedback() {
             feedbackOverlay.classList.remove('active');
+        }
+
+        function stopPlayerTimer() {
+            if (playerTimerInterval) {
+                clearInterval(playerTimerInterval);
+                playerTimerInterval = null;
+            }
         }
 
         // Error Handling

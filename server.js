@@ -139,7 +139,10 @@ io.on('connection', (socket) => {
       timeLeft--;
       if (timeLeft <= 0) {
         clearInterval(gameTimer);
+        gameState.timeLeft = 0;
         showResults();
+      } else {
+        gameState.timeLeft = timeLeft;
       }
     }, 1000);
   }
@@ -248,10 +251,11 @@ io.on('connection', (socket) => {
       roundDetails: roundResults
     });
 
-    // Notify Players (individual feedback)
+    // Notify Players (individual feedback + global leaderboard)
     io.to('players').emit('game:result', {
       correctAnswer: correctAnswer,
-      correctAnswerText: q.answers[correctAnswer]
+      correctAnswerText: q.answers[correctAnswer],
+      teams: getTeamList() // Send current rankings to all players
     });
 
     // Send specific result to each player
@@ -360,7 +364,8 @@ io.on('connection', (socket) => {
           total: gameState.currentQuestion.total,
           category: gameState.currentQuestion.category,
           question: gameState.currentQuestion.question,
-          answers: gameState.currentQuestion.answers
+          answers: gameState.currentQuestion.answers,
+          timeLeft: gameState.timeLeft || 0
         });
       } else if (gameState.phase === 'result') {
         // Send last result

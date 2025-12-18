@@ -215,6 +215,33 @@ body {
     color: var(--text-secondary);
 }
 
+.player-timer {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0.5rem 0;
+    text-shadow: 0 0 10px rgba(0, 212, 170, 0.3);
+    transition: all 0.3s ease;
+}
+
+.player-timer.urgent {
+    color: var(--danger);
+    animation: pulseTimer 1s infinite;
+    text-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+}
+
+@keyframes pulseTimer {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
 .buzzer-area {
     flex: 1;
     display: flex;

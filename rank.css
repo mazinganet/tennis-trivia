@@ -1,12 +1,80 @@
-/* Team Rank Badge */
-.team-rank {
-    font-size: 0.9rem;
-    font-weight: 700;
+/* ==================== Leaderboard Styles ==================== */
+.mini-leaderboard,
+.final-leaderboard {
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.mini-leaderboard h3 {
+    font-size: 1.1rem;
     color: var(--text-secondary);
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.leaderboard-list {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--glass-border);
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    animation: slideIn 0.3s ease-out;
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-item.me {
     background: rgba(255, 255, 255, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-right: 0.5rem;
-    min-width: 24px;
-    text-align: center;
+    border-radius: 10px;
+}
+
+.rank {
+    width: 25px;
+    font-weight: 800;
+    color: var(--warning);
+}
+
+.team-color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.team-name {
+    flex: 1;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.team-score {
+    font-weight: 800;
+    color: var(--primary);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
